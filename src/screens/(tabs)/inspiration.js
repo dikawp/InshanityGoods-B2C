@@ -1,19 +1,7 @@
 import { useEffect, useState } from "react";
 import { 
-  Input, 
-  NativeBaseProvider, 
   ScrollView,
-  View,
-  Image, 
-  Flex, 
-  Box, 
-  Text,
   Heading, 
-  Body,
-  FlatList,
-  Card,
-  CardItem,
-  Center,
   VStack
  } from "native-base";
 import { TouchableOpacity } from "react-native";

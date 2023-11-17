@@ -54,15 +54,6 @@ const Home = () => {
           />
         </TouchableOpacity>
       </Flex>
-      {/* <Input
-        placeholder=" Search Product"
-        width="100%"
-        borderRadius="4"
-        py="3"
-        px="1"
-        mt="24px"
-        fontSize="14"
-      /> */}
       <TouchableOpacity onPress={() => navigation.navigate("Discount")}>
         <Image
           height={150}
