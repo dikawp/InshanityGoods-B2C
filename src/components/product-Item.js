@@ -2,6 +2,7 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native"; // Correct import
 import { Box, Text, Image, HStack, VStack, Heading } from "native-base";
+import { useNavigation } from "@react-navigation/native";
 
 
 const ProductItem = ({ item }) => {
@@ -15,6 +16,10 @@ const ProductItem = ({ item }) => {
         itemImage : item.image
       })}
       >
+  const navigation = useNavigation()
+
+  return (
+    <TouchableOpacity> 
       <Box
         height={240}
         width={170}

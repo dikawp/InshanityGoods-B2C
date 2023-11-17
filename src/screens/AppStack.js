@@ -7,6 +7,8 @@ import Discount from './discount';
 import Address from './(detail)/Address';
 import Checkout from './(detail)/Checkout';
 import ItemDetail from './(detail)/ItemDetail';
+import Editprofile from './Settings/editProfile';
+import DetailScreen from './detail-inspiration';
 
 const Stack = createNativeStackNavigator();
 const noHead = { headerShown: false };
@@ -27,6 +29,9 @@ function MyStack() {
             }}
             />
             <Stack.Screen name='ItemDetail' component={ItemDetail}/>
+              
+            <Stack.Screen name='EditProfile' component={Editprofile}/>
+            <Stack.Screen name='Detail-Inspiration' component={DetailScreen} options={noHead}/>
         </Stack.Navigator>
     </NavigationContainer>
   );
