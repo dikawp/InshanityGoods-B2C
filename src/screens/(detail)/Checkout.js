@@ -35,7 +35,7 @@ const Checkout = ()=>{
             height={'100%'}>
                 
                 <ScrollView marginBottom={79}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=> navigation.navigate('Address')}>
                         <Box justifyContent={'center'} padding={3} marginY={5} height={135} width={360} backgroundColor={'#FEFFC1'} borderRadius={10} alignSelf={'center'}>
                             <Text fontWeight={'bold'} fontSize={16}>Brody Pentagon</Text>
                             <Text color={'#89580A'} fontSize={12}>darkside@gmail.com</Text>
@@ -120,7 +120,7 @@ const Checkout = ()=>{
                         <Text fontSize="2xl" color="#3B454D">Payment</Text>
                         <Text fontSize={18}>IDR {Harga}</Text>
                     </View>
-                    <TouchableOpacity onPress={()=> navigation.navigate('Address')}>
+                    <TouchableOpacity>
                         <Box 
                         top={2.5} 
                         borderRadius={10} 

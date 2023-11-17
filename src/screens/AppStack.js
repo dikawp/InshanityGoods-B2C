@@ -7,8 +7,9 @@ import Discount from './discount';
 import Address from './(detail)/Address';
 import Checkout from './(detail)/Checkout';
 import ItemDetail from './(detail)/ItemDetail';
-import Editprofile from './Settings/editProfile';
+import Editprofile from './(setting)/editProfile';
 import DetailScreen from './detail-inspiration';
+import FormAddress from './(detail)/FormAddress';
 
 const Stack = createNativeStackNavigator();
 const noHead = { headerShown: false };
@@ -29,7 +30,8 @@ function MyStack() {
             }}
             />
             <Stack.Screen name='ItemDetail' component={ItemDetail}/>
-              
+            <Stack.Screen name='FormAddress' component={FormAddress}/>
+            
             <Stack.Screen name='EditProfile' component={Editprofile}/>
             <Stack.Screen name='Detail-Inspiration' component={DetailScreen} options={noHead}/>
         </Stack.Navigator>
