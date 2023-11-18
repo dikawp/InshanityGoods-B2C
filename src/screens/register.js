@@ -8,9 +8,10 @@ import {
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import SignButton from "../components/sign-button";
+import { useNavigation } from "@react-navigation/native";
 
 function Register() {
-
+ const navigation = useNavigation()
   return (
       <View mx={14} my={20}>
         <Text fontSize={"32px"}>Sign Up</Text>
@@ -32,9 +33,9 @@ function Register() {
         </VStack>
 
         <Center mt={3} flexDirection={"row"}>
-          <Text fontSize={"14px"}>Already have Account?</Text>
-          <TouchableOpacity>
-            <Text fontSize={"14px"} color={"blue.400"} ml={2}>
+          <Text fontSize={"16px"}>Already have Account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+            <Text fontSize={"16px"} color={"blue.400"} ml={2}>
               Sign In
             </Text>
           </TouchableOpacity>

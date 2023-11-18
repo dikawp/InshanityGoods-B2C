@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Home from "../(tabs)/home";
+import Home from "./home";
 import Inspiration from "../(tabs)/inspiration";
 import Saved from "../(tabs)/saved";
 import Setting from "../(tabs)/setting";

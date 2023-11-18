@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  Input,
   HStack,
   ScrollView,
   Image,
@@ -45,7 +44,7 @@ const Home = () => {
             Welcome back
           </Text>
         </Box>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
           <Image
             size={"64px"}
             borderRadius={100}

@@ -38,7 +38,7 @@ const Setting = ( ) => {
         <Box py={4}>
           <VStack p={6}>
             <Box py={5}>
-              <Pressable onPress={() => navigation.navigate("EditProfile")}>
+              <Pressable onPress={() => navigation.navigate("Edit Profile")}>
                 <HStack>
                   <Icon
                     as={<Ionicons name={"settings-outline"} />}
@@ -53,22 +53,22 @@ const Setting = ( ) => {
             </Box>
             <Divider />
             <Box py={5}>
-              <Pressable>
+              <Pressable onPress={() => navigation.navigate("Address")}>
                 <HStack>
                   <Icon
-                    as={<Ionicons name={"bookmark-outline"} />}
+                    as={<Ionicons name={"location-outline"} />}
                     size={8}
                     color={"black"}
                   />
                   <Text bold pt={1} pl={4}>
-                    Saved Items
+                    Addresses
                   </Text>
                 </HStack>
               </Pressable>
             </Box>
             <Divider />
             <Box py={5}>
-              <Pressable>
+              <Pressable onPress={() => navigation.navigate("Register")}> 
                 <HStack>
                   <Icon
                     as={<Ionicons name={"log-out-outline"} />}

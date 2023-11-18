@@ -1,47 +1,29 @@
 import {
-  NativeBaseProvider,
   ScrollView,
-  Flex,
   Box,
   Image,
   View,
-  Pressable,
   Text,
-  Container,
-  Divider,
   Radio,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import React, { Component, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Ionicons } from '@expo/vector-icons';
 
 const Address = () => {
-  const [value, setValue] = React.useState("one");
   const navigation = useNavigation()
   return (
-    <View>
       <View padding={21} height={"100%"} width={"100%"}>
         <ScrollView>
           <Text color={"#89580A"} fontSize={14}>
             Choose And Address
           </Text>
           <View alignItems={"center"}>
-            <Radio.Group
-              name="myRadioGroup"
-              accessibilityLabel="favorite number"
-              value={value}
-              onChange={(nextValue) => {
-                setValue(nextValue);
-              }}
-            >
-              <Radio shadow={2} value="one" my="2">
+            <Radio.Group>
+              <Radio shadow={2} value="1">
                 <Box
                   value="one"
-                  style={
-                    setValue === "one"
-                      ? styles.selectedRadioButton
-                      : styles.unselectedRadioButton
-                  }
                   padding={3}
                   justifyContent={"center"}
                   my={3}
@@ -53,34 +35,21 @@ const Address = () => {
                   flexDirection={"row"}
                 >
                   <View marginRight={3}>
-                    <Text color={"#89580A"} fontSize={11}>
+                    <Text color={"#89580A"} fontSize={11} mt={3}>
                       My Office
-                    </Text>
-                    <Text fontWeight={"bold"} color={"#89580A"} fontSize={14}>
-                      Brody Pendragon
                     </Text>
                     <Text color={"#89580A"} fontSize={14}>
                       Leibnizstraße 16, Wohnheim 6, No: 8X Clausthal-Zellerfeld,
                       Germany
                     </Text>
                   </View>
-                  <Image
-                    justifyContent={"center"}
-                    zIndex={4}
-                    size={6}
-                    source={require("../../images/edit.png")}
-                    alt="yolo"
-                  />
+                  <TouchableOpacity>
+                    <Ionicons name="create-outline" size={28}></Ionicons>
+                  </TouchableOpacity>
                 </Box>
               </Radio>
-              <Radio shadow={2} value="two" my="2">
+              <Radio shadow={2} value="2">
                 <Box
-                  value="one"
-                  style={
-                    setValue === "two"
-                      ? styles.selectedRadioButton
-                      : styles.unselectedRadioButton
-                  }
                   padding={3}
                   justifyContent={"center"}
                   my={3}
@@ -92,24 +61,17 @@ const Address = () => {
                   flexDirection={"row"}
                 >
                   <View marginRight={3}>
-                    <Text color={"#89580A"} fontSize={11}>
+                    <Text color={"#89580A"} fontSize={11} mt={3}>
                       My Office
-                    </Text>
-                    <Text fontWeight={"bold"} color={"#89580A"} fontSize={14}>
-                      Brody Pendragon
                     </Text>
                     <Text color={"#89580A"} fontSize={14}>
                       Leibnizstraße 16, Wohnheim 6, No: 8X Clausthal-Zellerfeld,
                       Germany
                     </Text>
                   </View>
-                  <Image
-                    justifyContent={"center"}
-                    zIndex={4}
-                    size={6}
-                    source={require("../../images/edit.png")}
-                    alt="yolo"
-                  />
+                  <TouchableOpacity>
+                    <Ionicons name="create-outline" size={28}></Ionicons>
+                  </TouchableOpacity>
                 </Box>
               </Radio>
             </Radio.Group>
@@ -127,7 +89,7 @@ const Address = () => {
           alignSelf={"center"}
           alignItems={"center"}
         >
-          <TouchableOpacity onPress={() => navigation.navigate("FormAddress")}>
+          <TouchableOpacity onPress={() => navigation.navigate("Form Address")}>
             <Box
               justifyContent={"center"}
               alignItems={"center"}
@@ -155,22 +117,7 @@ const Address = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
   );
-};
-
-const styles = {
-  radioButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginVertical: 10,
-  },
-  selectedRadioButton: {
-    backgroundColor: "#FFFD86", // Ganti warna latar belakang saat dipilih
-  },
-  unselectedRadioButton: {
-    backgroundColor: "#FEFFC1", // Ganti warna latar belakang saat tidak dipilih
-  },
 };
 
 export default Address;

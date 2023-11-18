@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Box, Center, NativeBaseProvider } from 'native-base';
+import { Box, Center, Heading} from 'native-base';
 
 const SavedScreen = () => {
   const [savedItems, setSavedItems] = useState([
@@ -34,8 +34,10 @@ const SavedScreen = () => {
   };
 
   return (
-      <Center marginTop={10}>
-      <Text style={{ fontSize: 30, marginBottom: 16, fontWeight: 'bold', color: '#89580A'}}>Saved Items</Text>
+      <Center marginTop={12}>
+      <Heading mt={1} textAlign={"center"} fontSize={30} color={"#89580A"}>
+        Saved Items
+      </Heading>
         {savedItems.map((item) => (
           <Box
             key={item.id}
@@ -64,7 +66,7 @@ const SavedScreen = () => {
             </View>
             <Ionicons
               style={{ marginLeft: 'auto' }}
-              name={item.bookmarked ? 'bookmark' : 'bookmark-outline'}
+              name={item.bookmarked ? 'bookmark-outline' : 'bookmark'}
               size={28}
               color={item.bookmarked ? 'black' : 'black'}
               onPress={() => toggleBookmark(item.id)}

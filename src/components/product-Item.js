@@ -8,7 +8,7 @@ const ProductItem = ({ item }) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
-      onPress={()=> navigation.navigate('ItemDetail', {
+      onPress={()=> navigation.navigate('Item Detail', {
         itemName : item.nama,
         itemDesc : item.deskripsi,
         itemPrice : item.harga,

@@ -2,16 +2,11 @@ import { ImageBackground } from "react-native";
 import {
   Box,
   Button,
-  HStack,
   Heading,
   Image,
-  ScrollView,
   VStack,
   Text,
-  Divider,
-  Icon,
   Input,
-  Pressable,
 } from "native-base";
 
 const Editprofile = () => {

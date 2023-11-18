@@ -7,8 +7,8 @@ import {
   Center,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
-import items from "../dummy/furniture";
-import ProductItem from "../components/product-Item";
+import items from "../../dummy/furniture";
+import ProductItem from "../../components/product-Item";
 
 const Discount = () => {
   const activeCategory = "All";
@@ -38,7 +38,7 @@ const Discount = () => {
           height={150}
           width="100%"
           mt={30}
-          source={require("../images/promo_poster.png")}
+          source={require("../../images/promo_poster.png")}
           alt="diskon"
         />
       </TouchableOpacity>

@@ -11,7 +11,7 @@ const InspirationItem = ({ item }) => {
         <TouchableOpacity
         onPress={() => {
           /* 1. Navigate to the Details route with params */
-          navigation.navigate('Detail-Inspiration', {
+          navigation.navigate('Detail Inspiration', {
             itemId: item.id,
             itemDetail: item.deskripsi,
             itemImage: item.image
