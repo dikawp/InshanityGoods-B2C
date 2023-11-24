@@ -26,7 +26,7 @@ const ProductItem = ({ item }) => {
         borderRadius={10}
         shadow={3}
       >
-        <Image source={{ uri : item.image }} height="60%" borderRadius={10} alt="null" />
+        <Image source={{ uri : item.image }} height="60%" width={'100%'} borderRadius={10} alt="null" />
         <HStack alignItems={"center"} justifyContent={"space-between"}>
           <VStack space={0.5} mt={2}>
             <Heading size="xs">{item.nama}</Heading>

@@ -5,13 +5,13 @@ import Login from './login';
 import Register from './register'
 
 import Tabs from './(tabs)/_layout';
-import Discount from './(home)/discount';
-import Address from './(home)/Address';
-import Checkout from './(home)/Checkout';
-import ItemDetail from './(home)/ItemDetail';
-import Editprofile from './(setting)/editProfile';
-import DetailScreen from './detail-inspiration';
-import FormAddress from './(home)/FormAddress';
+import Discount from './_home/discount';
+import Checkout from './_home/Checkout';
+import ItemDetail from './_home/ItemDetail';
+import Editprofile from './_setting/editProfile';
+import DetailScreen from './_inspiration/detail-inspiration';
+import Address from './_address/Address';
+import FormAddress from './_address/FormAddress';
 
 const Stack = createNativeStackNavigator();
 const noHead = { headerShown: false };

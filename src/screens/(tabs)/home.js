@@ -31,7 +31,7 @@ const Home = () => {
     setProducts(filteredItems);
   }, [activeCategory]);
 
-  console.log(Products);
+  // console.log(Products);
 
   return (
     <ScrollView mx={14} mt={20} showsVerticalScrollIndicator={false}>
