@@ -12,9 +12,21 @@ import {
 } from "native-base";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import { getAuth, signOut } from "@firebase/auth";
 
 const Setting = ( ) => {
+  const session = getAuth();
+  const user = session.currentUser;
   const navigation = useNavigation();
+  
+  const Logout = () => {
+    signOut(session).then(() => {
+      navigation.navigate('Login')
+    }).catch((error) => {
+      alert(error);
+    });
+  }
+
   return (
     <>
       <Box flex={1}>
@@ -32,7 +44,7 @@ const Setting = ( ) => {
             alignSelf={"center"}
           />
           <Center py={3}>
-            <Heading>Brody</Heading>
+            <Heading>{user.email}</Heading>
           </Center>
         </Box>
         <Box py={4}>
@@ -68,7 +80,7 @@ const Setting = ( ) => {
             </Box>
             <Divider />
             <Box py={5}>
-              <Pressable onPress={() => navigation.navigate("Register")}> 
+              <Pressable onPress={() => Logout()}> 
                 <HStack>
                   <Icon
                     as={<Ionicons name={"log-out-outline"} />}

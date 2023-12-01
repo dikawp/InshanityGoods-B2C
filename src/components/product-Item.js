@@ -6,12 +6,16 @@ import { Box, Text, Image, HStack, VStack, Heading } from "native-base";
 
 const ProductItem = ({ item }) => {
   const navigation = useNavigation();
+
+  // const {items} = item
+  // console.log(ini adalah hasil dari parameter ${item})
+  
   return (
     <TouchableOpacity
       onPress={()=> navigation.navigate('Item Detail', {
-        itemName : item.nama,
-        itemDesc : item.deskripsi,
-        itemPrice : item.harga,
+        itemName : item.name,
+        itemDesc : item.desc,
+        itemPrice : item.price,
         itemImage : item.image
       })}
       >
@@ -29,10 +33,10 @@ const ProductItem = ({ item }) => {
         <Image source={{ uri : item.image }} height="60%" width={'100%'} borderRadius={10} alt="null" />
         <HStack alignItems={"center"} justifyContent={"space-between"}>
           <VStack space={0.5} mt={2}>
-            <Heading size="xs">{item.nama}</Heading>
-            <Text fontSize="sm">{item.kategori}</Text>
+            <Heading size="xs">{item.name}</Heading>
+            <Text fontSize="sm">{item.category}</Text>
             <Heading mt={3} size={"sm"}>
-              IDR: {item.harga}
+              IDR: {item.price}
             </Heading>
           </VStack>
         </HStack>

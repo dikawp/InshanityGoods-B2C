@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Spinner, ScrollView, Center } from "native-base";
 import CategoryButton from "./category-button";
-import items from "../dummy/furniture";
+import items from "../dummy/category";
 
 const Categories = ({ onChange }) => {
   const [categories, setCategories] = useState([]);
@@ -34,7 +34,6 @@ const Categories = ({ onChange }) => {
             return (
               <CategoryButton
                 title={item.kategori}
-                // isFirst={index == 0 ? true : false}
                 isActive={index == activeCategory}
                 onPress={() => categoryButtonHandler(index)}
                 key={index}

@@ -1,28 +1,23 @@
-import { View, Text, VStack, FormControl, Input, Center } from "native-base";
+import { View, Text, VStack, FormControl, Input, Center, Icon, Pressable } from "native-base";
 import { TouchableOpacity } from "react-native";
 import SignButton from "../components/sign-button";
 import { useNavigation } from "@react-navigation/native";
-import { useState, useEffect } from "react";
-import { FIREBASE_AUTH } from "../firebase/credential";
-import { createUserWithEmailAndPassword, onAuthStateChanged } from "@firebase/auth";
-
+import { useState } from "react";
+import { FIREBASE_AUTH, FIRESTORE } from "../firebase/credential";
+import { createUserWithEmailAndPassword } from "@firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Register = () => {
   const navigation = useNavigation();
+  const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [show, setShow] = useState(false);
   const Auth = FIREBASE_AUTH;
-
-  useEffect(() => {
-    const session = Auth.onAuthStateChanged(user => {
-      if (user){
-        navigation.navigate('Tabs')
-      }
-    })
-    return session;
-  },[])
+  const db = FIRESTORE;
 
   const signUp = async () => {
     setLoading(true);
@@ -30,14 +25,19 @@ const Register = () => {
       if (password !== confirmPassword) {
         alert("Password and Confirm Password tidak sama cuy");
         return;
-      }else{
-        createUserWithEmailAndPassword(Auth, email, password).then(
-          (userCredential) => {
-            const user = userCredential.user;
-            console.log(user);
-            navigation.navigate("Tabs");
-          }
-        );   
+      } else {
+        const userCredential = await createUserWithEmailAndPassword(
+          Auth,
+          email,
+          password
+        );
+        await setDoc(doc(db, "users", userCredential.user.uid), {
+          username: displayName,
+          email: userCredential.user.email,
+          phoneNumber: "",
+          photoUrl: "",
+        });
+        navigation.navigate("Login");
       }
     } catch (error) {
       console.log(error);
@@ -55,6 +55,15 @@ const Register = () => {
         <FormControl>
           <Input
             py={3}
+            placeholder="Username"
+            value={displayName}
+            type="text"
+            onChangeText={(text) => setDisplayName(text)}
+          />
+        </FormControl>
+        <FormControl>
+          <Input
+            py={3}
             placeholder="Email"
             value={email}
             type="email"
@@ -63,20 +72,46 @@ const Register = () => {
         </FormControl>
         <FormControl>
           <Input
-            py={3}
-            placeholder="Password"
-            type="password"
-            value={password}
+            type={show ? "text" : "password"}
             onChangeText={(text) => setPassword(text)}
+            secureTextEntry
+            InputRightElement={
+              <Pressable onPress={() => setShow(!show)}>
+                <Icon
+                  as={
+                    <MaterialIcons
+                      name={show ? "visibility" : "visibility-off"}
+                    />
+                  }
+                  size={5}
+                  mr="2"
+                  color="muted.400"
+                />
+              </Pressable>
+            }
+            placeholder="Password"
           />
         </FormControl>
         <FormControl>
           <Input
-            py={3}
-            placeholder="Comfirm Password"
-            type="password"
-            value={confirmPassword}
+            type={show ? "text" : "password"}
             onChangeText={(text) => setConfirmPassword(text)}
+            secureTextEntry
+            InputRightElement={
+              <Pressable onPress={() => setShow(!show)}>
+                <Icon
+                  as={
+                    <MaterialIcons
+                      name={show ? "visibility" : "visibility-off"}
+                    />
+                  }
+                  size={5}
+                  mr="2"
+                  color="muted.400"
+                />
+              </Pressable>
+            }
+            placeholder="Password"
           />
         </FormControl>
         <TouchableOpacity onPress={() => signUp()}>
@@ -88,7 +123,7 @@ const Register = () => {
         <Text fontSize={"16px"}>Already have Account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text fontSize={"16px"} color={"blue.400"} ml={2}>
-            Sign In
+            Sign Up
           </Text>
         </TouchableOpacity>
       </Center>

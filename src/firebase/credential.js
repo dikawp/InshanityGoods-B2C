@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "@firebase/app";
-import { getAuth } from "@firebase/auth";
+// import { getAuth } from "@firebase/auth";
 import { getFirestore } from "@firebase/firestore";
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
@@ -12,7 +12,7 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  // Copas dari Firebase, Project Setting -> General -> Your Apps -> Copas firebaseconfig
+  // Ambil di Firebase Project Settings
 };
 
 // Initialize Firebase

@@ -10,41 +10,62 @@ import {
 } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Categories from "../../components/categories";
-import items from "../../dummy/furniture";
 import ProductItem from "../../components/product-Item";
 import { useNavigation } from "@react-navigation/native";
+import { FIRESTORE } from "../../firebase/credential";
+import { getDocs, collection } from "firebase/firestore";
 
 const Home = () => {
   const navigation = useNavigation();
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [Products, setProducts] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [listProducts, setListProducts] = useState([]);
+  const [products, setProducts] = useState([]);
+
+  const productsCollectionRef = collection(FIRESTORE, "products");
+
+  // READ DATA
+  // SET PRODUCT LIST
+  useEffect(() => {
+    const getListProducts = async () => {
+      try {
+        const data = await getDocs(productsCollectionRef);
+        const productList = data.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setListProducts(productList);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getListProducts();
+  }, []);
 
   const categoriesHandler = (categoryName) => {
     setActiveCategory(categoryName);
   };
 
-  useEffect(() => {
-    const filteredItems = items
-      .filter((product) => product.kategori === activeCategory)
-      .flatMap((category) => category.items);
+  if (listProducts) {
+    useEffect(() => {
+      const filteredItems = listProducts.filter(
+        (product) => product.category === activeCategory
+      );
 
-    setProducts(filteredItems);
-  }, [activeCategory]);
+      setProducts(filteredItems);
+    }, [activeCategory, listProducts]);
+  }
 
-  // console.log(Products);
+  console.log(listProducts);
+  console.log(products);
 
   return (
     <ScrollView mx={14} mt={20} showsVerticalScrollIndicator={false}>
-      <Flex direction="row" alignItems={"center"} justifyContent={'space-between'}>
+      <Flex direction="row" alignItems="center" justifyContent="space-between">
         <Box>
-          <Text fontSize={24}>
-            Hi Brody,
-          </Text>
-          <Text fontSize={18}>
-            Welcome back
-          </Text>
+          <Text fontSize={24}>Hi Brody,</Text>
+          <Text fontSize={18}>Welcome back</Text>
         </Box>
-        <TouchableOpacity onPress={() => navigation.navigate('Edit Profile')}>
+        <TouchableOpacity onPress={() => navigation.navigate("Edit Profile")}>
           <Image
             size={"64px"}
             borderRadius={100}
@@ -66,11 +87,16 @@ const Home = () => {
       <Categories onChange={categoriesHandler} />
 
       <HStack flexWrap={"wrap"} justifyContent={"space-between"}>
-        {Products.map((product) => {
-          return <ProductItem item={product} key={product.id} />;
-        })}
+        {activeCategory === "all"
+          ? listProducts.map((listProducts) => (
+              <ProductItem item={listProducts} key={listProducts.id} />
+            ))
+          : products.map((product) => (
+              <ProductItem item={product} key={product.id} />
+            ))}
       </HStack>
     </ScrollView>
   );
 };
+
 export default Home;
