@@ -8,7 +8,7 @@ import {
   Image,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
-import SignButton from "../components/sign-button";
+import SignButton from "../components/buttons/sign-button";
 import { useNavigation } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { FIREBASE_AUTH } from "../firebase/credential";

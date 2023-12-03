@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ScrollView, Heading, VStack } from "native-base";
 import { TouchableOpacity } from "react-native";
-import Categories from "../../components/categories-inspiration";
-import inspiration_data from "../../dummy/data";
-import ProductItem from "../../components/inspiration-item";
+import Categories from "../../../components/categories-inspiration";
+import inspiration_data from "../../../dummy/data";
+import ProductItem from "../../../components/item/inspiration-item";
 
 const InspirationScreen = ({ navigation }) => {
   const [activeCategory, setActiveCategory] = useState("All");

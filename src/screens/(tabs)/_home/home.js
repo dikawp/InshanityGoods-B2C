@@ -9,22 +9,25 @@ import {
   Heading,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
-import Categories from "../../components/categories";
-import ProductItem from "../../components/product-Item";
+import Categories from "../../../components/categories";
+import ProductItem from "../../../components/item/product-Item";
 import { useNavigation } from "@react-navigation/native";
-import { FIRESTORE } from "../../firebase/credential";
+import { FIRESTORE } from "../../../firebase/credential";
 import { getDocs, collection } from "firebase/firestore";
+import { getAuth } from "@firebase/auth";
+
 
 const Home = () => {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState("all");
   const [listProducts, setListProducts] = useState([]);
   const [products, setProducts] = useState([]);
+  const session = getAuth();
+  const user = session.currentUser;
 
   const productsCollectionRef = collection(FIRESTORE, "products");
 
-  // READ DATA
-  // SET PRODUCT LIST
+  // NGAMBIL DATA
   useEffect(() => {
     const getListProducts = async () => {
       try {
@@ -62,14 +65,14 @@ const Home = () => {
     <ScrollView mx={14} mt={20} showsVerticalScrollIndicator={false}>
       <Flex direction="row" alignItems="center" justifyContent="space-between">
         <Box>
-          <Text fontSize={24}>Hi Brody,</Text>
+          <Text fontSize={24}>Hi {user.displayName},</Text>
           <Text fontSize={18}>Welcome back</Text>
         </Box>
         <TouchableOpacity onPress={() => navigation.navigate("Edit Profile")}>
           <Image
             size={"64px"}
             borderRadius={100}
-            source={require("../../images/brody.png")}
+            source={require("../../../images/brody.png")}
             alt="hitam"
           />
         </TouchableOpacity>
@@ -79,7 +82,7 @@ const Home = () => {
           height={150}
           width="100%"
           mt={30}
-          source={require("../../images/promo_poster.png")}
+          source={require("../../../images/promo_poster.png")}
           alt="diskon"
         />
       </TouchableOpacity>

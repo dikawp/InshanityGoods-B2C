@@ -33,7 +33,7 @@ const Setting = ( ) => {
         <Box bg={"muted.500"} h={"25%"} w={"100%"}></Box>
         <Box alignSelf={"center"}>
           <Image
-            source={require("../../../assets/favicon.png")}
+            source={require("../../../../assets/favicon.png")}
             w={"120px"}
             h={"120px"}
             mt={"-10"}
@@ -44,7 +44,7 @@ const Setting = ( ) => {
             alignSelf={"center"}
           />
           <Center py={3}>
-            <Heading>{user.email}</Heading>
+            <Heading>{user.displayName}</Heading>
           </Center>
         </Box>
         <Box py={4}>

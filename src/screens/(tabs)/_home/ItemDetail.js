@@ -17,7 +17,7 @@ const ItemDetail = ({ route, item }) => {
 
   const navigation = useNavigation();
   const [Total, setTotal] = useState([]);
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(1);
 
   useEffect(() => {
     calculateTotal();
@@ -79,7 +79,7 @@ const ItemDetail = ({ route, item }) => {
               IDR {itemPrice}
             </Text>
 
-            <TouchableOpacity disabled={count === 0} onPress={minus}>
+            <TouchableOpacity disabled={count === 1} onPress={minus}>
               <Box
                 borderRadius={10}
                 height={36}

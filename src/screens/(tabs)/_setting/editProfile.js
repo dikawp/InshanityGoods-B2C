@@ -22,7 +22,7 @@ import {
 } from "@firebase/auth";
 import { doc, updateDoc } from "firebase/firestore";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FIRESTORE } from "../../firebase/credential";
+import { FIRESTORE } from "../../../firebase/credential";
 
 const Editprofile = () => {
   const session = getAuth();
@@ -102,7 +102,7 @@ const Editprofile = () => {
         <Box bg={"muted.500"} h={"20%"} w={"100%"}></Box>
         <Box alignSelf={"center"}>
           <Image
-            source={require("../../../assets/favicon.png")}
+            source={require("../../../../assets/favicon.png")}
             w={"100px"}
             mt={"-10"}
             h={"100px"}
