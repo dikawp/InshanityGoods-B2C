@@ -12,6 +12,8 @@ import { TouchableOpacity } from "react-native";
 import Categories from "../../../components/categories";
 import ProductItem from "../../../components/item/product-Item";
 import { useNavigation } from "@react-navigation/native";
+
+// DATABASE
 import { FIRESTORE } from "../../../firebase/credential";
 import { getDocs, collection } from "firebase/firestore";
 import { getAuth } from "@firebase/auth";
@@ -25,6 +27,7 @@ const Home = () => {
   const session = getAuth();
   const user = session.currentUser;
 
+  // AKSES Table 
   const productsCollectionRef = collection(FIRESTORE, "products");
 
   // NGAMBIL DATA
@@ -58,8 +61,8 @@ const Home = () => {
     }, [activeCategory, listProducts]);
   }
 
-  console.log(listProducts);
-  console.log(products);
+  // console.log(listProducts);
+  // console.log(products);
 
   return (
     <ScrollView mx={14} mt={20} showsVerticalScrollIndicator={false}>
