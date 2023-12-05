@@ -39,7 +39,7 @@ const Home = () => {
         setListProducts(productList);
       } catch (err) {
         console.error(err);
-      }
+      }               
     };
     getListProducts();
   }, []);
