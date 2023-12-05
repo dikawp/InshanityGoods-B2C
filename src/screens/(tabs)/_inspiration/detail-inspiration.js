@@ -6,7 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 function DetailScreen({ route }) {
   const { itemId, itemDetail, itemImage } = route.params;
   const navigation = useNavigation();
-  console.log("Isi Detail", route)
+  // console.log("Isi Detail", route)
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -20,7 +20,7 @@ function DetailScreen({ route }) {
             Inspiration
           </Heading>
         </Center>
-        <Image w="100%" h={200} my={5} source={itemImage} alt="Selected Image" />
+        <Image  style={{ width: 400, height: 200 }} source={{uri: itemImage}} alt="Selected Image" />
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
           {/* <Text>itemId: {JSON.stringify(itemId)}</Text> */}
           <Text fontSize={"20"} textAlign={'left'}> {JSON.stringify(itemDetail)}</Text>

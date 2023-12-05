@@ -8,7 +8,7 @@ const ProductItem = ({ item }) => {
   const navigation = useNavigation();
 
   // const {items} = item
-  // console.log(ini adalah hasil dari parameter ${item})
+  console.log(`ini adalah hasil dari products image ${item.image}`)
   
   return (
     <TouchableOpacity
