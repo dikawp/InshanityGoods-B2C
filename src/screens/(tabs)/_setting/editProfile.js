@@ -49,7 +49,7 @@ const Editprofile = () => {
       if (newPassword) {
         const credential = EmailAuthProvider.credential(
           user.email,
-          modalPassword
+          modalPassword 
         );
 
         await reauthenticateWithCredential(user, credential);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Spinner, ScrollView, Center } from "native-base";
 import CategoryButton from "./buttons/category-button";
-import inspiration_data from "../dummy/data";
+import inspiration_data from "../dummy/category_inspiration";
 
 const Categories = ({ onChange }) => {
   const [categories, setCategories] = useState([]);
