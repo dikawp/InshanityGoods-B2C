@@ -56,7 +56,7 @@ const SavedScreen = () => {
     };
 
     fetchData();
-  }, []);
+  }, [user]);
   
   useEffect(() => {
     const fetchData = async () => {
@@ -84,9 +84,19 @@ const SavedScreen = () => {
     };
 
     fetchData();
-  }, [])
+  }, [fetchedItems])
 
-  console.log(displayedItems)
+  useEffect(() => {
+    // Lakukan sesuatu ketika displayedItems berubah
+    console.log("Displayed items changed:", displayedItems);
+  
+    // Contoh: Akses displayedItems dan lakukan sesuatu
+    displayedItems.forEach(item => {
+      console.log(item);
+    });
+  }, [displayedItems]);
+
+  // console.log(`Ini adlaah savedItems ${displayedItems}`)
   return (
       <Center marginTop={12}>
       <Heading mt={1} textAlign={"center"} fontSize={30} color={"#89580A"}>
