@@ -6,11 +6,12 @@ import { Box, Text, Image, HStack, VStack, Heading } from "native-base";
 
 const ProductItem = ({ item }) => {
   const navigation = useNavigation();
-  // console.log(item.id);
+
   
   return (
     <TouchableOpacity
       onPress={()=> navigation.navigate('Item Detail', {
+        itemId : item.id,
         itemName : item.name,
       })}
       >

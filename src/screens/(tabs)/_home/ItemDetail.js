@@ -14,10 +14,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { collection, query, where, getDocs } from "firebase/firestore";
 import { FIRESTORE } from "../../../firebase/credential";
 
+
 const ItemDetail = ({ route }) => {
   const { itemName } = route.params;
   const productRef = collection(FIRESTORE, "products");
   const [detailProduct, setDetailProduct] = useState(['']);
+
+
 
   const q = query(productRef, where("name", "==", itemName));
 
@@ -42,6 +45,46 @@ const ItemDetail = ({ route }) => {
   const navigation = useNavigation();
   const [Total, setTotal] = useState([]);
   const [count, setCount] = useState(1);
+  const [isSaved, setIsSaved] = useState(true);
+
+  // AKSES Table 
+  const savedCollectionRef = collection(FIRESTORE, "saved");
+  const session = getAuth();
+  const auth = getAuth();
+  const user = session.currentUser;
+  const userSaved = user.email
+  const onBookmarks = async () => {
+    try {
+      const test = await addDoc(savedCollectionRef, {
+        items: itemId,
+        email: userSaved
+      });
+
+      if(test) {
+        console.log('SUDAH BERHASIL ')
+          // passing data to saved.js
+      }
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+  // Use onAuthStateChanged to listen for changes in the user's authentication state
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    const userSaved = user.email;
+
+    if (userSaved) {
+      console.log('User Display Name:', userSaved);
+    } else {
+      console.log('User Display Name is not set.');
+    }
+  } else {
+    // User is signed out
+    console.log('User is signed out.');
+  }
+});
 
   console.log(itemDetail);
 
@@ -60,6 +103,7 @@ const ItemDetail = ({ route }) => {
   let minus = () => {
     setCount(count - 1);
   };
+
 
   return (
     <NativeBaseProvider>
@@ -82,7 +126,7 @@ const ItemDetail = ({ route }) => {
           />
 
           <Box marginLeft={"auto"}>
-            <TouchableOpacity >
+            <TouchableOpacity onPress={onBookmarks}>
               <Ionicons
                 style={{ marginLeft: "auto" }}
                 name={"bookmark-outline"}
