@@ -27,6 +27,8 @@ const Home = () => {
   const session = getAuth();
   const user = session.currentUser;
 
+  console.log(user.email)
+
   // AKSES Table 
   const productsCollectionRef = collection(FIRESTORE, "products");
 

@@ -12,12 +12,60 @@ import React, { Component, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
 
+// compoennt
+import SavedScreen from "../saved";
+
+// DATABASE
+import { FIRESTORE } from "../../../firebase/credential";
+import { getDocs, collection, doc, setDoc, addDoc } from "firebase/firestore";
+import { getAuth, onAuthStateChanged} from "@firebase/auth";
+
 const ItemDetail = ({ route, item }) => {
-  const { itemName, itemDesc, itemPrice, itemImage } = route.params;
+  const { itemId, itemName, itemDesc, itemPrice, itemImage } = route.params;
 
   const navigation = useNavigation();
   const [Total, setTotal] = useState([]);
   const [count, setCount] = useState(1);
+  const [isSaved, setIsSaved] = useState(true);
+
+  // AKSES Table 
+  const savedCollectionRef = collection(FIRESTORE, "saved");
+  const session = getAuth();
+  const auth = getAuth();
+  const user = session.currentUser;
+  const userSaved = user.email
+  const onBookmarks = async () => {
+    try {
+      const test = await addDoc(savedCollectionRef, {
+        items: itemId,
+        email: userSaved
+      });
+
+      if(test) {
+        console.log('SUDAH BERHASIL ')
+          // passing data to saved.js
+      }
+    } catch (err) {
+      console.log(err)
+    }
+
+  }
+  // Use onAuthStateChanged to listen for changes in the user's authentication state
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // User is signed in
+    const userSaved = user.email;
+
+    if (userSaved) {
+      console.log('User Display Name:', userSaved);
+    } else {
+      console.log('User Display Name is not set.');
+    }
+  } else {
+    // User is signed out
+    console.log('User is signed out.');
+  }
+});
 
   useEffect(() => {
     calculateTotal();
@@ -34,7 +82,24 @@ const ItemDetail = ({ route, item }) => {
   let minus = () => {
     setCount(count - 1);
   };
-  console.log(Total);
+  console.log(itemId);
+  console.log(user.displayName)
+
+  const toggleSave = async () => {
+    const itemDocRef = doc(FIRESTORE, 'saved', itemId); // Replace 'yourCollection' with your Firestore collection name
+
+    if (isSaved) {
+      // Item is already saved, so remove it
+      await deleteDoc(itemDocRef);
+      
+    } else {
+      // Item is not saved, so save it
+      await setDoc(itemDocRef, { saved: true });
+    }
+
+    // Update the local state to reflect the change
+    setIsSaved(!isSaved);
+  };
 
   return (
     <NativeBaseProvider>
@@ -57,7 +122,7 @@ const ItemDetail = ({ route, item }) => {
           />
 
           <Box marginLeft={"auto"}>
-            <TouchableOpacity >
+            <TouchableOpacity onPress={onBookmarks}>
               <Ionicons
                 style={{ marginLeft: "auto" }}
                 name={"bookmark-outline"}

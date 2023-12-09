@@ -9,8 +9,8 @@ const InspirationItem = ({ item }) => {
   // console.log("Isi image", item.image)
   const { width, height } = Dimensions.get('window');
   const imageUri = item.items[0].image;
-  console.log(`ini adalah hasil dari inspirations: ${item.category}`)
-  console.log('INI ADALAH BATAS =====================')
+  // console.log(`ini adalah hasil dari inspirations: ${item.category}`)
+  // console.log('INI ADALAH BATAS =====================')
   return (
     <View width={'100%'} m={"auto"} my={-3} p={2} height={'225px'} alignItems={'center'}>
         <TouchableOpacity

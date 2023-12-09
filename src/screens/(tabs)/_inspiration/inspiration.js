@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { ScrollView, Heading, VStack, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Categories from "../../../components/categories-inspiration";
-import inspiration_data from "../../../dummy/data";
+// import inspiration_data from "../../../dummy/data";
 import ProductItem from "../../../components/item/inspiration-item";
 
 // DATABASE
@@ -11,7 +11,7 @@ import { getDocs, collection } from "firebase/firestore";
 import { getAuth } from "@firebase/auth";
 
 const InspirationScreen = ({ navigation }) => {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("all");
   const [listProducts, setListProducts] = useState([]);
   const [listInspiration, setListInspirations] = useState([]);
   const [filteredInspirations, setFilteredInspirations] = useState([]);
@@ -106,7 +106,7 @@ const InspirationScreen = ({ navigation }) => {
       </Heading>
       <Categories onChange={categoriesHandler} />
       <VStack>
-      {activeCategory === "All"
+      {activeCategory === "all"
           ? listProducts.map((listProducts) => (
               <ProductItem item={listProducts} key={listProducts.id} />
             ))
