@@ -47,6 +47,8 @@ const Home = () => {
     getListProducts();
   }, []);
 
+  console.log(listProducts);
+
   const categoriesHandler = (categoryName) => {
     setActiveCategory(categoryName);
   };

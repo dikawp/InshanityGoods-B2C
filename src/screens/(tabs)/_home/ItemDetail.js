@@ -11,20 +11,46 @@ import { TouchableOpacity } from "react-native";
 import React, { Component, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { FIRESTORE } from "../../../firebase/credential";
 
-const ItemDetail = ({ route, item }) => {
-  const { itemName, itemDesc, itemPrice, itemImage } = route.params;
+const ItemDetail = ({ route }) => {
+  const { itemName } = route.params;
+  const productRef = collection(FIRESTORE, "products");
+  const [detailProduct, setDetailProduct] = useState(['']);
 
+  const q = query(productRef, where("name", "==", itemName));
+
+  useEffect(() => {
+    const getListProducts = async () => {
+      try {
+        const data = await getDocs(q);
+        const productList = data.docs.map((doc) => ({
+          ...doc.data(),
+        }));
+        setDetailProduct(productList);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getListProducts();
+  }, []);
+
+  // console.log(detailProduct);
+
+  const itemDetail = detailProduct[0];
   const navigation = useNavigation();
   const [Total, setTotal] = useState([]);
   const [count, setCount] = useState(1);
+
+  console.log(itemDetail);
 
   useEffect(() => {
     calculateTotal();
   }, [count]);
 
   const calculateTotal = () => {
-    const newTotal = count * itemPrice;
+    const newTotal = count * itemDetail.price;
     setTotal([newTotal]);
   };
 
@@ -34,7 +60,6 @@ const ItemDetail = ({ route, item }) => {
   let minus = () => {
     setCount(count - 1);
   };
-  console.log(Total);
 
   return (
     <NativeBaseProvider>
@@ -53,7 +78,7 @@ const ItemDetail = ({ route, item }) => {
             width={348}
             height={310}
             alt="image"
-            source={{ uri: itemImage }}
+            source={{ uri: itemDetail.image }}
           />
 
           <Box marginLeft={"auto"}>
@@ -67,7 +92,7 @@ const ItemDetail = ({ route, item }) => {
           </Box>
 
           <Text color={"#89580A"} fontWeight={"bold"} fontSize={20}>
-            {itemName}
+            {itemDetail.name}
           </Text>
 
           <View
@@ -76,7 +101,7 @@ const ItemDetail = ({ route, item }) => {
             justifyContent={"space-between"}
           >
             <Text flex={2} fontSize={16}>
-              IDR {itemPrice}
+              IDR {itemDetail.price}
             </Text>
 
             <TouchableOpacity disabled={count === 1} onPress={minus}>
@@ -118,7 +143,7 @@ const ItemDetail = ({ route, item }) => {
 
           <Text fontWeight={"bold"}>Description</Text>
 
-          <Text>{itemDesc}</Text>
+          <Text>{itemDetail.desc}</Text>
         </ScrollView>
       </View>
 
@@ -144,10 +169,10 @@ const ItemDetail = ({ route, item }) => {
           onPress={() =>
             navigation.navigate("Checkout", {
               totalPrice: Total,
-              itemName : itemName,
-              itemImage : itemImage,
+              itemName : itemDetail.name,
+              itemImage : itemDetail.image,
               quantity : count,
-              itemPrice : itemPrice,
+              itemPrice : itemDetail.price,
             })
           }
         >

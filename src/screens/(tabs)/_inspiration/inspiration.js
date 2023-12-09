@@ -2,31 +2,29 @@ import { useEffect, useState } from "react";
 import { ScrollView, Heading, VStack, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Categories from "../../../components/categories-inspiration";
-import inspiration_data from "../../../dummy/data";
+import inspiration_data from "../../../dummy/category_inspiration";
 import ProductItem from "../../../components/item/inspiration-item";
 
 // DATABASE
 import { FIRESTORE } from "../../../firebase/credential";
 import { getDocs, collection } from "firebase/firestore";
-import { getAuth } from "@firebase/auth";
 
 const InspirationScreen = ({ navigation }) => {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [listProducts, setListProducts] = useState([]);
+  const [activeCategory, setActiveCategory] = useState("all");
   const [listInspiration, setListInspirations] = useState([]);
-  const [filteredInspirations, setFilteredInspirations] = useState([]);
+  const [inspiration, setInspirations] = useState([]);
 
-  const productsCollectionRef = collection(FIRESTORE, "inspirations");
+  const inspirationsCollectionRef = collection(FIRESTORE, "inspirations");
 
   useEffect(() => {
     const getListProducts = async () => {
       try {
-        const data = await getDocs(productsCollectionRef);
+        const data = await getDocs(inspirationsCollectionRef);
         const productList = data.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setListProducts(productList);
+        setListInspirations(productList);
       } catch (err) {
         console.error(err);
       }
@@ -36,69 +34,25 @@ const InspirationScreen = ({ navigation }) => {
 
   const categoriesHandler = (categoryName) => {
     setActiveCategory(categoryName);
-    // filterProducts(categoryName);
   };
 
-  // useEffect(() => {
-  //   filterProducts(activeCategory);
-  // }, [activeCategory, listProducts]);
-
-  // const filterProducts = (category) => {
-
-  //   console.log(activeCategory)
-  //   if (category === "All") {
-  //     setFilteredProducts(listProducts);
-  //   } else {
-  //     console.log(`ini ELSE telah bekerja`)
-  //     const filtered = listProducts.filter(
-  //       (item) => item.category === activeCategory
-  //     );
-  //     // console.log(filtered)
-  //     setFilteredProducts(filtered);
-  //   }
-  // };
-
-  if (listProducts) {
+  if (listInspiration) {
     useEffect(() => {
-      const filteredItems = listProducts.filter(
-        (product) => product.category === activeCategory
+      const filteredItems = listInspiration.filter(
+        (inspiration) => inspiration.category === activeCategory
       );
       
       if (filteredItems) {
         console.log(`true`)
       }
-      setListInspirations(filteredItems);
-    }, [activeCategory, setFilteredInspirations]);
-    // console.log('test')
+      setInspirations(filteredItems);
+    }, [activeCategory, listInspiration]);
   }
   
-  console.log(activeCategory)
+  // console.log(activeCategory)
   console.log(listInspiration)
-  // useEffect(() => {
-  //   console.log("Updated List Inspirations:", listInspiration);
-  // }, [listInspiration]);
-  
-  // useEffect(() => {
-  //   console.log("listProducts:", JSON.stringify(filteredProducts));
-  //   filterProducts(activeCategory);
-  // }, [activeCategory, listProducts]);
-  // console.log(` INI ADLAH TEST filtered : ${listInspiration}`)
+  console.log(inspiration)
 
-  // Switch case
-  // const planTerakhir = () => {
-  //   switch(listProducts) {
-
-  //     case activeCategory === 'All':  
-  //      return listProducts.map((item) => {
-  //       <ProductItem item={item} key={item.id} />;
-  //      });
-  //     case "two":   return <ComponentB />;
-  //     case "three": return <ComponentC />;
-  //     case "four":  return <ComponentD />;
-
-  
-  //   }
-  // }
   return (
     <ScrollView mx={14} mt={12} scrollIndicatorInsets={false}>
       <Heading mt={1} textAlign={"center"} fontSize={30} color={"#89580A"}>
@@ -106,24 +60,14 @@ const InspirationScreen = ({ navigation }) => {
       </Heading>
       <Categories onChange={categoriesHandler} />
       <VStack>
-      {activeCategory === "All"
-          ? listProducts.map((listProducts) => (
-              <ProductItem item={listProducts} key={listProducts.id} />
+      {activeCategory === "all"
+          ? listInspiration.map((listInspiration) => (
+              <ProductItem item={listInspiration} key={listInspiration.id} />
             ))
-          : listInspiration.map((product) => (
-              <ProductItem item={product} key={product.id} />
+          : inspiration.map((inspiration) => (
+              <ProductItem item={inspiration} key={inspiration.id} />
             ))
         }
-        {/* {listProducts.map((product) => {
-
-        if (activeCategory === "All") {
-          return <ProductItem item={product} key={product.id} />;
-        } else {
-          console.log(activeCategory)
-          console.log(JSON.stringify(listInspiration))
-        }
-        return null;
-      })} */}
       </VStack>
     </ScrollView>
   );

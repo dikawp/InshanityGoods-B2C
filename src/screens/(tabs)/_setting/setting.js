@@ -53,7 +53,7 @@ const Setting = ( ) => {
               <Pressable onPress={() => navigation.navigate("Edit Profile")}>
                 <HStack>
                   <Icon
-                    as={<Ionicons name={"settings-outline"} />}
+                    as={<Ionicons name={"person-circle-outline"}/>}
                     size={8}
                     color={"black"}
                   />
