@@ -49,7 +49,7 @@ const Editprofile = () => {
       if (newPassword) {
         const credential = EmailAuthProvider.credential(
           user.email,
-          modalPassword 
+          modalPassword
         );
 
         await reauthenticateWithCredential(user, credential);
@@ -80,18 +80,15 @@ const Editprofile = () => {
             <FormControl>
               <FormControl.Label>Old Password</FormControl.Label>
               <Input
-              secureTextEntry
-              value={modalPassword}
-              onChangeText={(text) => setModalPassword(text)}
-              placeholder="Your Current Password"
-            />
+                secureTextEntry
+                value={modalPassword}
+                onChangeText={(text) => setModalPassword(text)}
+                placeholder="Your Current Password"
+              />
             </FormControl>
           </Modal.Body>
           <Modal.Footer>
-            <Button
-              flex="1"
-              onPress={() => updateProfileData()}
-              >
+            <Button flex="1" onPress={() => updateProfileData()}>
               Confirm
             </Button>
           </Modal.Footer>
@@ -127,8 +124,9 @@ const Editprofile = () => {
               Phone Number
             </Text>
             <Input
-              placeholder={user.phoneNumber}
+              placeholder={"Phone Number"}
               onChangeText={(text) => setNewPhone(text)}
+              type="file"
             />
             <Text mt={3} mb={2} bold>
               Password
@@ -136,7 +134,6 @@ const Editprofile = () => {
             <Input
               type={show ? "text" : "password"}
               onChangeText={(text) => setNewPassword(text)}
-              secureTextEntry
               InputRightElement={
                 <Pressable onPress={() => setShow(!show)}>
                   <Icon
@@ -153,8 +150,14 @@ const Editprofile = () => {
               }
               placeholder="New Password"
             />
-            <Button mt={6} 
-            onPress={() => setModalVisible(true)}>
+            <Text mt={3} mb={2} bold>
+              Upload Profile
+            </Text>
+            <Input
+              placeholder={"File"}
+              type="file"
+            />
+            <Button mt={6} onPress={() => setModalVisible(true)}>
               UPDATE
             </Button>
           </VStack>

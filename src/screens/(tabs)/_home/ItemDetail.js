@@ -11,18 +11,37 @@ import { TouchableOpacity } from "react-native";
 import React, { Component, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-
-// compoennt
-import SavedScreen from "../saved";
-
-// DATABASE
+import { collection, query, where, getDocs } from "firebase/firestore";
 import { FIRESTORE } from "../../../firebase/credential";
-import { getDocs, collection, doc, setDoc, addDoc } from "firebase/firestore";
-import { getAuth, onAuthStateChanged} from "@firebase/auth";
 
-const ItemDetail = ({ route, item }) => {
-  const { itemId, itemName, itemDesc, itemPrice, itemImage } = route.params;
 
+const ItemDetail = ({ route }) => {
+  const { itemName } = route.params;
+  const productRef = collection(FIRESTORE, "products");
+  const [detailProduct, setDetailProduct] = useState(['']);
+
+
+
+  const q = query(productRef, where("name", "==", itemName));
+
+  useEffect(() => {
+    const getListProducts = async () => {
+      try {
+        const data = await getDocs(q);
+        const productList = data.docs.map((doc) => ({
+          ...doc.data(),
+        }));
+        setDetailProduct(productList);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getListProducts();
+  }, []);
+
+  // console.log(detailProduct);
+
+  const itemDetail = detailProduct[0];
   const navigation = useNavigation();
   const [Total, setTotal] = useState([]);
   const [count, setCount] = useState(1);
@@ -67,12 +86,14 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
+  console.log(itemDetail);
+
   useEffect(() => {
     calculateTotal();
   }, [count]);
 
   const calculateTotal = () => {
-    const newTotal = count * itemPrice;
+    const newTotal = count * itemDetail.price;
     setTotal([newTotal]);
   };
 
@@ -82,24 +103,7 @@ onAuthStateChanged(auth, (user) => {
   let minus = () => {
     setCount(count - 1);
   };
-  console.log(itemId);
-  console.log(user.displayName)
 
-  const toggleSave = async () => {
-    const itemDocRef = doc(FIRESTORE, 'saved', itemId); // Replace 'yourCollection' with your Firestore collection name
-
-    if (isSaved) {
-      // Item is already saved, so remove it
-      await deleteDoc(itemDocRef);
-      
-    } else {
-      // Item is not saved, so save it
-      await setDoc(itemDocRef, { saved: true });
-    }
-
-    // Update the local state to reflect the change
-    setIsSaved(!isSaved);
-  };
 
   return (
     <NativeBaseProvider>
@@ -118,7 +122,7 @@ onAuthStateChanged(auth, (user) => {
             width={348}
             height={310}
             alt="image"
-            source={{ uri: itemImage }}
+            source={{ uri: itemDetail.image }}
           />
 
           <Box marginLeft={"auto"}>
@@ -132,7 +136,7 @@ onAuthStateChanged(auth, (user) => {
           </Box>
 
           <Text color={"#89580A"} fontWeight={"bold"} fontSize={20}>
-            {itemName}
+            {itemDetail.name}
           </Text>
 
           <View
@@ -141,7 +145,7 @@ onAuthStateChanged(auth, (user) => {
             justifyContent={"space-between"}
           >
             <Text flex={2} fontSize={16}>
-              IDR {itemPrice}
+              IDR {itemDetail.price}
             </Text>
 
             <TouchableOpacity disabled={count === 1} onPress={minus}>
@@ -183,7 +187,7 @@ onAuthStateChanged(auth, (user) => {
 
           <Text fontWeight={"bold"}>Description</Text>
 
-          <Text>{itemDesc}</Text>
+          <Text>{itemDetail.desc}</Text>
         </ScrollView>
       </View>
 
@@ -209,10 +213,10 @@ onAuthStateChanged(auth, (user) => {
           onPress={() =>
             navigation.navigate("Checkout", {
               totalPrice: Total,
-              itemName : itemName,
-              itemImage : itemImage,
+              itemName : itemDetail.name,
+              itemImage : itemDetail.image,
               quantity : count,
-              itemPrice : itemPrice,
+              itemPrice : itemDetail.price,
             })
           }
         >
