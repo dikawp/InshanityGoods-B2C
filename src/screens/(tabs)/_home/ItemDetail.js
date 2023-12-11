@@ -8,19 +8,26 @@ import {
   Divider,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  getDocs,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { getAuth } from "@firebase/auth";
 import { FIRESTORE } from "../../../firebase/credential";
-
 
 const ItemDetail = ({ route }) => {
   const { itemName } = route.params;
   const productRef = collection(FIRESTORE, "products");
   const [detailProduct, setDetailProduct] = useState(['']);
-
-
 
   const q = query(productRef, where("name", "==", itemName));
 
@@ -29,6 +36,7 @@ const ItemDetail = ({ route }) => {
       try {
         const data = await getDocs(q);
         const productList = data.docs.map((doc) => ({
+            id: doc.id,
           ...doc.data(),
         }));
         setDetailProduct(productList);
@@ -39,54 +47,53 @@ const ItemDetail = ({ route }) => {
     getListProducts();
   }, []);
 
-  // console.log(detailProduct);
-
   const itemDetail = detailProduct[0];
   const navigation = useNavigation();
   const [Total, setTotal] = useState([]);
   const [count, setCount] = useState(1);
-  const [isSaved, setIsSaved] = useState(true);
+  const [isSaved, setIsSaved] = useState();
 
-  // AKSES Table 
+  // AKSES Collection 
   const savedCollectionRef = collection(FIRESTORE, "saved");
   const session = getAuth();
-  const auth = getAuth();
   const user = session.currentUser;
-  const userSaved = user.email
+
   const onBookmarks = async () => {
     try {
-      const test = await addDoc(savedCollectionRef, {
-        items: itemId,
-        email: userSaved
-      });
+      const savedItemRef = doc(savedCollectionRef, user.email);
+      const savedItemSnap = await getDoc(savedItemRef);
 
-      if(test) {
-        console.log('SUDAH BERHASIL ')
-          // passing data to saved.js
+      if (savedItemSnap.exists()) {
+
+        const savedData = savedItemSnap.data();
+        const isItemSaved = savedData.items.includes(itemDetail.id);
+
+        if (isItemSaved) {
+          // Lek Item ws ono == hapus
+          const updatedItems = savedData.items.filter((id) => id !== itemDetail.id);
+          await updateDoc(savedItemRef, { items: updatedItems });
+          setIsSaved(false)
+
+          console.log("Item removed from savedItem");
+        } else {
+          // Lek Item drg ono == tambah
+          await updateDoc(savedItemRef, {
+            items: [...savedData.items, itemDetail.id],
+          });
+          setIsSaved(true)
+
+          console.log("Item added to savedItem");
+        }
+      } else {
+        // Jika dokumen dengan dokume id == email durung onok, tambah dokumen
+        await setDoc(savedItemRef, { items: [itemDetail.id] });
+
+        console.log("Dokumen Donn");
       }
     } catch (err) {
-      console.log(err)
+      console.error(err);
     }
-
-  }
-  // Use onAuthStateChanged to listen for changes in the user's authentication state
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    // User is signed in
-    const userSaved = user.email;
-
-    if (userSaved) {
-      console.log('User Display Name:', userSaved);
-    } else {
-      console.log('User Display Name is not set.');
-    }
-  } else {
-    // User is signed out
-    console.log('User is signed out.');
-  }
-});
-
-  console.log(itemDetail);
+  };
 
   useEffect(() => {
     calculateTotal();
@@ -103,7 +110,6 @@ onAuthStateChanged(auth, (user) => {
   let minus = () => {
     setCount(count - 1);
   };
-
 
   return (
     <NativeBaseProvider>
@@ -129,8 +135,9 @@ onAuthStateChanged(auth, (user) => {
             <TouchableOpacity onPress={onBookmarks}>
               <Ionicons
                 style={{ marginLeft: "auto" }}
-                name={"bookmark-outline"}
+                name={isSaved ? "bookmark" : "bookmark-outline"}
                 size={45}
+                color={isSaved ? "black" : "black"}
               />
             </TouchableOpacity>
           </Box>
@@ -213,10 +220,10 @@ onAuthStateChanged(auth, (user) => {
           onPress={() =>
             navigation.navigate("Checkout", {
               totalPrice: Total,
-              itemName : itemDetail.name,
-              itemImage : itemDetail.image,
-              quantity : count,
-              itemPrice : itemDetail.price,
+              itemName: itemDetail.name,
+              itemImage: itemDetail.image,
+              quantity: count,
+              itemPrice: itemDetail.price,
             })
           }
         >

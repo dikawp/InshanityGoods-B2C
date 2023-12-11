@@ -12,7 +12,7 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  //Wibu
+//
 };
 
 // Initialize Firebase
