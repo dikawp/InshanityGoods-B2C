@@ -74,6 +74,10 @@ const SavedScreen = () => {
         console.error("Error fetching data:", error);
       }
     };
+
+    fetchData();
+  }, [user]);
+
   
     getAllItems();
   }, [fetchedItems]);
@@ -91,6 +95,7 @@ const toggleBookmark = async (itemId) => {
       // Perbarui dokumen saved dengan array items yang baru
       await updateDoc(savedDocRef, { items: updatedItems });
 
+
       console.log("Item removed from saved");
     }
   } catch (error) {
@@ -101,6 +106,22 @@ const toggleBookmark = async (itemId) => {
 
   console.log(fetchedItems);
   // console.log(listProducts);
+
+    fetchData();
+  }, [fetchedItems])
+
+  useEffect(() => {
+    // Lakukan sesuatu ketika displayedItems berubah
+    console.log("Displayed items changed:", displayedItems);
+  
+    // Contoh: Akses displayedItems dan lakukan sesuatu
+    displayedItems.forEach(item => {
+      console.log(item);
+    });
+  }, [displayedItems]);
+
+  // console.log(`Ini adlaah savedItems ${displayedItems}`)
+
   return (
     <ScrollView mx={14} mt={12} pb={5} scrollIndicatorInsets={false}>
       <Heading mt={1} textAlign={"center"} fontSize={30} color={"#89580A"}>
