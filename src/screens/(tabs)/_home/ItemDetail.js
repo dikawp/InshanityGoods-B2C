@@ -110,6 +110,7 @@ const ItemDetail = ({ route }) => {
   let minus = () => {
     setCount(count - 1);
   };
+  
 
   return (
     <NativeBaseProvider>

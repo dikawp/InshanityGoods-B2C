@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -20,7 +20,7 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
 } from "@firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, onAuthStateChanged } from "firebase/firestore";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FIRESTORE } from "../../../firebase/credential";
 
@@ -34,6 +34,7 @@ const Editprofile = () => {
   const [modalPassword, setModalPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [show, setShow] = useState(false);
+  const [test, setTest] = useState([]);
   const db = FIRESTORE;
   const userRef = doc(db, "users", user.uid);
 
@@ -63,6 +64,25 @@ const Editprofile = () => {
       console.error("Error updating profile:", error);
     }
   };
+  console.log(user.displayName)
+  // import { getAuth, onAuthStateChanged } from 'firebase/firestore';
+
+  // const auth = getAuth();
+
+  useEffect(() => {
+    // const auth =  onAuthStateChanged(session, (user) => {
+      // });
+      
+      // return auth;
+    }, [])
+    // if (user) { 
+    //   const testSession = onAuthStateChanged(session, (user) => {
+    //     console.log(user.displayName)
+    //   })
+
+    //   return testSession;
+    //  }
+
 
   return (
     <>
