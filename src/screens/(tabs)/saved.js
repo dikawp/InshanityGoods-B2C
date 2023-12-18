@@ -23,6 +23,7 @@ const SavedScreen = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
   const [listProducts, setListProducts] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
+  const [toggleRefresh, setToggleRefresh] = useState(true);
   const session = getAuth();
   const user = session.currentUser;
   const savedCollectionRef = collection(FIRESTORE, "saved");
@@ -80,7 +81,8 @@ useEffect(() => {
       
         for (const value of fetchedItems.items) {
           const q = doc(productsCollectionRef, value);
-          const docSnap = await getDoc(q)
+          const docSnap = await getDoc(q);
+          
           if (docSnap.exists()) {
             // Access the document data and ID
             const productData = docSnap.data();
@@ -99,7 +101,11 @@ useEffect(() => {
   };
 
   fetchData();
-}, []);
+}, [fetchedItems]);
+
+useEffect(() => {
+  console.log(displayedItems)
+}, [])
 
 
   const toggleBookmark = async (itemId) => {
@@ -129,10 +135,14 @@ useEffect(() => {
         Saved Items
       </Heading>
       <Center marginTop={4}>
-      {displayedItems.map((item) => (
-        // console.log(item)  
-        <ProductItem item={item} key={item.id} />
-      ))}
+      {displayedItems.map((item) => {
+        console.log(` Berikut adlaah item.id ${listProducts.id}`)  
+
+        return (
+          <ProductItem item={item}  />
+        )
+        
+        })}
       </Center>
     </ScrollView>
   );

@@ -20,9 +20,11 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
 } from "@firebase/auth";
-import { doc, updateDoc, onAuthStateChanged } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FIRESTORE } from "../../../firebase/credential";
+import { onAuthStateChanged } from "firebase/auth";
+
 
 const Editprofile = () => {
   const session = getAuth();
@@ -70,10 +72,11 @@ const Editprofile = () => {
   // const auth = getAuth();
 
   useEffect(() => {
-    // const auth =  onAuthStateChanged(session, (user) => {
-      // });
+    const auth =  onAuthStateChanged(session, (user) => {
+      console.log(user.displayName)
+    });
       
-      // return auth;
+      return auth;
     }, [])
     // if (user) { 
     //   const testSession = onAuthStateChanged(session, (user) => {
