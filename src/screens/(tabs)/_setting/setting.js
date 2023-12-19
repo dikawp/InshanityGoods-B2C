@@ -13,10 +13,31 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, signOut } from "@firebase/auth";
+import { doc } from "firebase/firestore";
+import { FIRESTORE } from "../../../firebase/credential";
+import { onSnapshot } from "firebase/firestore";
+import React, { useState, useEffect } from "react";
 
-const Setting = ( ) => {
+const Setting = () => {
   const session = getAuth();
   const user = session.currentUser;
+  const [displayName, setDisplayName] = useState([]);
+  
+  useEffect(() => {
+    const userRef = doc(FIRESTORE, "users", user.uid);
+
+    const fetchData = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        console.log("Document Data (onSnapshot):", data);
+        setDisplayName(data);
+      } else {
+        console.log("Document does not exist!");
+      }
+    });
+    return () => fetchData();
+  }, [user.email]);
+  
   const navigation = useNavigation();
   
   const Logout = () => {
@@ -26,6 +47,8 @@ const Setting = ( ) => {
       alert(error);
     });
   }
+
+  console.log(user.uid);
 
   return (
     <>
@@ -44,7 +67,7 @@ const Setting = ( ) => {
             alignSelf={"center"}
           />
           <Center py={3}>
-            <Heading>{user.displayName}</Heading>
+            <Heading>{displayName.username}</Heading>
           </Center>
         </Box>
         <Box py={4}>

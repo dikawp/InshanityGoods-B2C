@@ -1,158 +1,77 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { Box, Center, Heading, ScrollView } from "native-base";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Center, Heading, ScrollView } from "native-base";
 
 import { FIRESTORE } from "../../firebase/credential";
-import {
-  getDocs,
-  collection,
-  query,
-  where,
-  doc,
-  getDoc,
-  onSnapshot,
-  updateDoc,
-  deleteDoc
-} from "firebase/firestore";
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
 import { getAuth } from "@firebase/auth";
+import SavedItem from "../../components/item/saved-item";
 
 const SavedScreen = () => {
   const [fetchedItems, setFetchedItems] = useState([]);
-  const [listProducts, setListProducts] = useState([]);
   const [displayedItems, setDisplayedItems] = useState([]);
   const session = getAuth();
   const user = session.currentUser;
-
   const savedCollectionRef = collection(FIRESTORE, "saved");
   const productsCollectionRef = collection(FIRESTORE, "products");
 
-
   useEffect(() => {
-    const unsubscribe = onSnapshot(savedCollectionRef, (snapshot) => {
-      const savedList = snapshot.docs.map((doc) => ({
-        email: doc.id,
-        ...doc.data(),
-      }));
-      setFetchedItems(savedList);
-    }, (error) => {
-      console.error("Error fetching data:", error);
-    });
-  
-    return () => unsubscribe(); 
-  }, []);
+    const docRef = doc(savedCollectionRef, user.email);
 
-  // NGAMBIL DATA PRODUCT
-  useEffect(() => {
-    const getListProducts = async () => {
-      try {
-        const data = await getDocs(productsCollectionRef);
-        const productList = data.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setListProducts(productList);
-      } catch (err) {
-        console.error(err);
+    // Tambahkan listener onSnapshot
+    const fetchData = onSnapshot(docRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        console.log("Document Data (onSnapshot):", data);
+        setFetchedItems(data);
+      } else {
+        console.log("Document does not exist!");
       }
-    };
-    getListProducts();
-  }, []);
+    });
+    return () => fetchData();
+  }, [user.email]);
 
-  // NGATUR DISPLAYED ITEMS
   useEffect(() => {
-    const getAllItems = async () => {
+    const fetchData = async () => {
       try {
-        const savedId = await fetchedItems[0].items
-        const filteredProducts = listProducts.filter((product) =>
-          savedId.includes(product.id)
-        );
-  
-        setDisplayedItems(filteredProducts);
+        const results = [];
+        if (fetchedItems && fetchedItems.items) {
+          for (const value of fetchedItems.items) {
+            const q = doc(productsCollectionRef, value);
+            const docSnap = await getDoc(q);
+
+            if (docSnap.exists()) {
+              // Access the document data and ID
+              const productData = docSnap.data();
+              const productId = docSnap.id;
+              // Save the data to results
+              results.push({ id: productId, ...productData });
+            } else {
+              console.log(`Document with value '${value}' does not exist.`);
+            }
+          }
+        }
+        setDisplayedItems(results);
+        // console.log(results);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-  
-    getAllItems();
+
+    fetchData();
   }, [fetchedItems]);
-  
 
-const toggleBookmark = async (itemId) => {
-  try {
-    const savedDocRef = doc(savedCollectionRef, user.email);
-    const savedDocSnap = await getDoc(savedDocRef);
+  console.log(displayedItems);
+  // console.log(fetchedItems);
 
-    if (savedDocSnap.exists()) {
-      const savedData = savedDocSnap.data();
-      const updatedItems = savedData.items.filter((id) => id !== itemId);
-
-      // Perbarui dokumen saved dengan array items yang baru
-      await updateDoc(savedDocRef, { items: updatedItems });
-
-      console.log("Item removed from saved");
-    }
-  } catch (error) {
-    console.error("Error toggling bookmark:", error);
-  }
-};
-
-
-  console.log(fetchedItems);
-  // console.log(listProducts);
   return (
-    <ScrollView mx={14} mt={12} pb={5} scrollIndicatorInsets={false}>
+    <ScrollView mx={14} mt={12} pb={5}>
       <Heading mt={1} textAlign={"center"} fontSize={30} color={"#89580A"}>
         Saved Items
       </Heading>
       <Center marginTop={4}>
-        {displayedItems.map((item) => (
-          console.log(item.id),
-          <Box
-            key={item.name}
-            flexDirection="row"
-            alignItems="center"
-            mt={5}
-            backgroundColor="white"
-            borderRadius={8}
-            padding={8}
-            width={350}
-            height={160}
-            shadow={5}
-            onPress={() => toggleBookmark(item.id)}
-          >
-            <Image
-              source={{ uri: item.image }}
-              style={{ width: 80, height: 80, marginRight: 15 }}
-            />
-            <View>
-              <Text
-                fontSize={16}
-                marginBottom={2}
-                fontWeight="bold"
-                color="black"
-              >
-                {item.name}
-              </Text>
-              <Text
-                style={{ fontSize: 12, color: "#89580A", marginBottom: 10 }}
-              >
-                {item.category}
-              </Text>
-              <Text style={{ fontSize: 12, fontWeight: "bold" }}>
-                {item.price}
-              </Text>
-            </View>
-            <Ionicons
-              style={{ marginLeft: "auto" }}
-              name={item.bookmarked ? "bookmark-outline" : "bookmark"}
-              size={28}
-              color={item.bookmarked ? "black" : "black"}
-              onPress={() => toggleBookmark(item.id)}
-            />
-          </Box>
-        ))}
+        {displayedItems.map((item) => {
+          return <SavedItem item={item} key={item.id} />;
+        })}
       </Center>
     </ScrollView>
   );

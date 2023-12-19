@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -20,7 +20,7 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
 } from "@firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FIRESTORE } from "../../../firebase/credential";
 
@@ -37,9 +37,25 @@ const Editprofile = () => {
   const db = FIRESTORE;
   const userRef = doc(db, "users", user.uid);
 
+  useEffect(() => {
+    const userRef = doc(FIRESTORE, "users", user.uid);
+
+    const fetchData = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        console.log("Document Data (onSnapshot):", data);
+        setNewUsername(data.username);
+        setNewPhone(data.phoneNumber);
+      } else {
+        console.log("Document does not exist!");
+      }
+    });
+    return () => fetchData();
+  }, [user.email]);
+
   const updateProfileData = async () => {
     try {
-      await updateProfile(user, { displayName: newUsername });
+      await updateProfile(session.currentUser, { displayName: newUsername });
       await updateDoc(userRef, {
         username: newUsername,
         phoneNumber: newPhone,
@@ -63,6 +79,7 @@ const Editprofile = () => {
       console.error("Error updating profile:", error);
     }
   };
+  console.log(newUsername);
 
   return (
     <>
