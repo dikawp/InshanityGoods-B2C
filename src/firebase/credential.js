@@ -12,13 +12,7 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAIRfZkJUmc6F9e6MSjGonlbo40yiKbfOg",
-  authDomain: "inshanitygoods-products.firebaseapp.com",
-  projectId: "inshanitygoods-products",
-  storageBucket: "inshanitygoods-products.appspot.com",
-  messagingSenderId: "181033257373",
-  appId: "1:181033257373:web:16fd33ac6493a3e2808774",
-  measurementId: "G-0XLKX22HD5"
+
 };
 
 // Initialize Firebase
