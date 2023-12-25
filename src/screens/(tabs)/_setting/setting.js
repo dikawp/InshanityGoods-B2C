@@ -22,7 +22,7 @@ const Setting = () => {
   const session = getAuth();
   const user = session.currentUser;
   const [displayName, setDisplayName] = useState([]);
-  
+
   useEffect(() => {
     const userRef = doc(FIRESTORE, "users", user.uid);
 
@@ -37,16 +37,18 @@ const Setting = () => {
     });
     return () => fetchData();
   }, [user.email]);
-  
+
   const navigation = useNavigation();
-  
+
   const Logout = () => {
-    signOut(session).then(() => {
-      navigation.navigate('Login')
-    }).catch((error) => {
-      alert(error);
-    });
-  }
+    signOut(session)
+      .then(() => {
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
 
   console.log(user.uid);
 
@@ -76,7 +78,7 @@ const Setting = () => {
               <Pressable onPress={() => navigation.navigate("Edit Profile")}>
                 <HStack>
                   <Icon
-                    as={<Ionicons name={"person-circle-outline"}/>}
+                    as={<Ionicons name={"person-circle-outline"} />}
                     size={8}
                     color={"black"}
                   />
@@ -103,7 +105,22 @@ const Setting = () => {
             </Box>
             <Divider />
             <Box py={5}>
-              <Pressable onPress={() => Logout()}> 
+              <Pressable onPress={() => navigation.navigate("History")}>
+                <HStack>
+                  <Icon
+                    as={<Ionicons name={"receipt-outline"} />}
+                    size={8}
+                    color={"black"}
+                  />
+                  <Text bold pt={1} pl={4}>
+                    History
+                  </Text>
+                </HStack>
+              </Pressable>
+            </Box>
+            <Divider />
+            <Box py={5}>
+              <Pressable onPress={() => Logout()}>
                 <HStack>
                   <Icon
                     as={<Ionicons name={"log-out-outline"} />}

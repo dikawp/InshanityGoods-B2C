@@ -214,7 +214,7 @@ const ItemDetail = ({ route }) => {
           <Text fontSize="2xl" color="#3B454D">
             Payment
           </Text>
-          <Text fontSize={18}>IDR {Total.length > 0 ? Total[0] : 0}</Text>
+          <Text fontSize={18}>IDR {Total}</Text>
         </View>
         <TouchableOpacity
           onPress={() =>

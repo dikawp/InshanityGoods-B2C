@@ -94,6 +94,7 @@ const Home = () => {
         />
       </TouchableOpacity>
       <Heading mt={5}>Categories</Heading>
+      
       <Categories onChange={categoriesHandler} />
 
       <HStack flexWrap={"wrap"} justifyContent={"space-between"}>
