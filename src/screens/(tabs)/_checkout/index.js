@@ -14,7 +14,6 @@ import { getAuth } from "@firebase/auth";
 import { getDoc, doc, updateDoc, deleteField } from "firebase/firestore";
 import { FIRESTORE } from "../../../firebase/credential";
 import { snapTransactions } from "./payment";
-import DisplaySnap from "../../../midtrans/snap";
 
 const Checkout = () => {
   const route = useRoute();
@@ -61,13 +60,11 @@ const Checkout = () => {
       credit_card: {
         secure: true,
       },
-      item_details: [
-        {
-          name: itemName,
-          price: itemPrice,
-          quantity: quantity,
-        },
-      ],
+      item_details: {
+        name: itemName,
+        price: itemPrice,
+        quantity: quantity,
+      },
       customer_details: {
         name: user.displayName,
         email: user.email,
@@ -81,10 +78,11 @@ const Checkout = () => {
     if (data) {
       try {
         const post = await snapTransactions(data);
-        console.log(post);
+        // console.log(post);
 
         const url = post.redirect_url;
-        navigation.navigate("Payment Gateway", { url });
+        console.log(url);
+        navigation.navigate("Payment Gateway", { url, data });
       } catch (error) {
         console.error("Error in Checkout:", error);
       }
