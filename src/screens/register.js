@@ -1,4 +1,13 @@
-import { View, Text, VStack, FormControl, Input, Center, Icon, Pressable } from "native-base";
+import {
+  View,
+  Text,
+  VStack,
+  FormControl,
+  Input,
+  Center,
+  Icon,
+  Pressable,
+} from "native-base";
 import { TouchableOpacity } from "react-native";
 import SignButton from "../components/buttons/sign-button";
 import { useNavigation } from "@react-navigation/native";
@@ -14,13 +23,11 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(false);
   const [show, setShow] = useState(false);
   const Auth = FIREBASE_AUTH;
   const db = FIRESTORE;
 
   const signUp = async () => {
-    setLoading(true);
     try {
       if (password !== confirmPassword) {
         alert("Password and Confirm Password tidak sama cuy");
@@ -42,8 +49,6 @@ const Register = () => {
     } catch (error) {
       console.log(error);
       alert("Sign Failed :" + error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -74,7 +79,6 @@ const Register = () => {
           <Input
             type={show ? "text" : "password"}
             onChangeText={(text) => setPassword(text)}
-            secureTextEntry
             InputRightElement={
               <Pressable onPress={() => setShow(!show)}>
                 <Icon
@@ -96,7 +100,6 @@ const Register = () => {
           <Input
             type={show ? "text" : "password"}
             onChangeText={(text) => setConfirmPassword(text)}
-            secureTextEntry
             InputRightElement={
               <Pressable onPress={() => setShow(!show)}>
                 <Icon
@@ -111,11 +114,11 @@ const Register = () => {
                 />
               </Pressable>
             }
-            placeholder="Password"
+            placeholder="Confirm Password"
           />
         </FormControl>
         <TouchableOpacity onPress={() => signUp()}>
-          <SignButton title={"Sign In"} />
+          <SignButton title={"Sign Up"} />
         </TouchableOpacity>
       </VStack>
 

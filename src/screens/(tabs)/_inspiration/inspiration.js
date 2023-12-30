@@ -53,8 +53,8 @@ const InspirationScreen = ({ navigation }) => {
   }
   
   // console.log(activeCategory)
-  console.log(listInspiration)
-  console.log(inspiration)
+  // console.log(listInspiration)
+  // console.log(inspiration)
 
   return (
     <ScrollView mx={14} mt={12} scrollIndicatorInsets={false}>

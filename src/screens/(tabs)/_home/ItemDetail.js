@@ -49,7 +49,7 @@ const ItemDetail = ({ route }) => {
 
   const itemDetail = detailProduct[0];
   const navigation = useNavigation();
-  const [Total, setTotal] = useState([]);
+  const [Total, setTotal] = useState();
   const [count, setCount] = useState(1);
   const [isSaved, setIsSaved] = useState();
 
@@ -100,9 +100,13 @@ const ItemDetail = ({ route }) => {
   }, [count]);
 
   const calculateTotal = () => {
-    const newTotal = count * itemDetail.price;
-    setTotal([newTotal]);
+    // Pastikan itemDetail sudah ada dan memiliki properti price
+    if (itemDetail) {
+      const newTotal = count * itemDetail.price;
+      setTotal(newTotal);
+    }
   };
+  
 
   let plus = () => {
     setCount(count + 1);
@@ -214,7 +218,7 @@ const ItemDetail = ({ route }) => {
           <Text fontSize="2xl" color="#3B454D">
             Payment
           </Text>
-          <Text fontSize={18}>IDR {Total}</Text>
+          <Text fontSize={18}>IDR {Total ? Total : itemDetail.price}</Text>
         </View>
         <TouchableOpacity
           onPress={() =>

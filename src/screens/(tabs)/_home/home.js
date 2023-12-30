@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 
 // DATABASE
 import { FIRESTORE } from "../../../firebase/credential";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, doc, onSnapshot } from "firebase/firestore";
 import { getAuth } from "@firebase/auth";
 
 
@@ -23,16 +23,30 @@ const Home = () => {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState("all");
   const [listProducts, setListProducts] = useState([]);
+  const [displayName, setDisplayName] = useState([]);
   const [products, setProducts] = useState([]);
   const session = getAuth();
   const user = session.currentUser;
 
-  console.log(user.email)
-
   // AKSES Table 
   const productsCollectionRef = collection(FIRESTORE, "products");
 
-  // NGAMBIL DATA
+  // NGAMBIL DATA USER
+  useEffect(() => {
+    const userRef = doc(FIRESTORE, "users", user.uid);
+
+    const fetchData = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        setDisplayName(data.username);
+      } else {
+        console.log("Document does not exist!");
+      }
+    });
+    return () => fetchData();
+  }, []);
+
+  // NGAMBIL DATA PRODUCT
   useEffect(() => {
     const getListProducts = async () => {
       try {
@@ -49,8 +63,6 @@ const Home = () => {
     getListProducts();
   }, []);
 
-  console.log(listProducts);
-
   const categoriesHandler = (categoryName) => {
     setActiveCategory(categoryName);
   };
@@ -65,14 +77,12 @@ const Home = () => {
     }, [activeCategory, listProducts]);
   }
 
-  // console.log(listProducts);
-  // console.log(products);
 
   return (
     <ScrollView mx={14} mt={20} showsVerticalScrollIndicator={false}>
       <Flex direction="row" alignItems="center" justifyContent="space-between">
         <Box>
-          <Text fontSize={24}>Hi {user.displayName},</Text>
+          <Text fontSize={24}>Hi {displayName},</Text>
           <Text fontSize={18}>Welcome back</Text>
         </Box>
         <TouchableOpacity onPress={() => navigation.navigate("Edit Profile")}>

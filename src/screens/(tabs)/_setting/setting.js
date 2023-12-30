@@ -22,6 +22,7 @@ const Setting = () => {
   const session = getAuth();
   const user = session.currentUser;
   const [displayName, setDisplayName] = useState([]);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const userRef = doc(FIRESTORE, "users", user.uid);
@@ -37,8 +38,6 @@ const Setting = () => {
     });
     return () => fetchData();
   }, [user.email]);
-
-  const navigation = useNavigation();
 
   const Logout = () => {
     signOut(session)
