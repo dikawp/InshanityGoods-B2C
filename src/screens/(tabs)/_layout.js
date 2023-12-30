@@ -1,10 +1,10 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from "@expo/vector-icons/Ionicons";
-import Home from "../(tabs)/home";
-import Inspiration from "../(tabs)/inspiration";
+import Home from "./_home/home";
+import Inspiration from "./_inspiration/inspiration";
 import Saved from "../(tabs)/saved";
-import Setting from "../(tabs)/setting";
+import Setting from "./_setting/setting";
 
 const Tab = createBottomTabNavigator();
 const noHead = { headerShown: false };
