@@ -18,8 +18,8 @@ import { snapTransactions } from "./payment";
 const Checkout = () => {
   const route = useRoute();
 
-  const Harga = route.params ? route.params.totalPrice : "";
-  const { itemName, itemPrice, itemImage, quantity } = route.params;
+  // const Harga = route.params;
+  const { itemName, itemPrice, itemImage, quantity, totalPrice } = route.params;
   const date = new Date().getTime();
   const navigation = useNavigation();
   const user = getAuth().currentUser;
@@ -55,7 +55,7 @@ const Checkout = () => {
     const data = {
       transaction_details: {
         order_id: "ORDER-" + date + "-" + user.uid,
-        gross_amount: parseInt(Harga),
+        gross_amount: parseInt(totalPrice),
       },
       credit_card: {
         secure: true,
@@ -169,7 +169,7 @@ const Checkout = () => {
           <Text fontSize="2xl" color="#3B454D">
             Payment
           </Text>
-          <Text fontSize={18}>IDR {Harga}</Text>
+          <Text fontSize={18}>IDR {totalPrice}</Text>
         </View>
 
         <TouchableOpacity onPress={Checkout}>

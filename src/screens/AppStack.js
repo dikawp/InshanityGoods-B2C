@@ -30,13 +30,8 @@ function MyStack() {
             <Stack.Screen name='Discount' component={Discount}/>
             <Stack.Screen name='Address' component={Address}/>
             <Stack.Screen name='History' component={History}/>
-            <Stack.Screen name='Checkout' component={Checkout} options={({route}) => ({
-              title: route.params?.title,
-            })}
-            initialParams={{
-              totalPrice: "",
-            }}
-            />
+            <Stack.Screen name='Checkout' component={Checkout} />
+            
             <Stack.Screen name='Payment Gateway' component={DisplaySnap}/>
             <Stack.Screen name='Item Detail' component={ItemDetail}/>
             <Stack.Screen name='Form Address' component={FormAdd}/>
