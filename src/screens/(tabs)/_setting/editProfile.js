@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -20,11 +20,13 @@ import {
   reauthenticateWithCredential,
   EmailAuthProvider,
 } from "@firebase/auth";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FIRESTORE } from "../../../firebase/credential";
 import { onAuthStateChanged } from "firebase/auth";
-
+// import ImagePicker from 'react-native-image-picker';
+// import {ImagePicker, launchImageLibrary} from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const Editprofile = () => {
   const session = getAuth();
@@ -36,17 +38,36 @@ const Editprofile = () => {
   const [modalPassword, setModalPassword] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
   const [show, setShow] = useState(false);
-  const [test, setTest] = useState([]);
+  const [dataUser, setDataUser] = useState([]);
   const db = FIRESTORE;
   const userRef = doc(db, "users", user.uid);
 
-  const updateProfileData = async () => {
+  useEffect(() => {
+    const userRef = doc(FIRESTORE, "users", user.uid);
+
+    const fetchData = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        console.log("Document Data (onSnapshot):", data);
+        setDataUser(data);
+        setNewUsername(data.username);
+        setNewPhone(data.phoneNumber);
+      } else {
+        console.log("Document does not exist!");
+      }
+    });
+    return () => fetchData();
+  }, [user.email]);
+
+  const updateProfileData = async (image) => {
     try {
-      await updateProfile(user, { displayName: newUsername });
+      await updateProfile(session.currentUser, { displayName: newUsername });
+
+      // configuration for photoURL
       await updateDoc(userRef, {
         username: newUsername,
         phoneNumber: newPhone,
-        photoUrl: "",
+        photoUrl: image,
       });
 
       if (newPassword) {
@@ -66,26 +87,41 @@ const Editprofile = () => {
       console.error("Error updating profile:", error);
     }
   };
-  console.log(user.displayName)
-  // import { getAuth, onAuthStateChanged } from 'firebase/firestore';
 
-  // const auth = getAuth();
+  // Upload Image
+  const [imageSource, setImageSource] = useState(null);
+  const [image, setImage] = useState(null);
 
-  useEffect(() => {
-    const auth =  onAuthStateChanged(session, (user) => {
-      console.log(user.displayName)
+  // const handleImagePicker = () => {
+  //   launchImageLibrary({ title: 'Select Image' }, (response) => {
+  //     if (response.didCancel) {
+  //       console.log('User cancelled image picker');
+  //     } else if (response.error) {
+  //       console.log('ImagePicker Error: ', response.error);
+  //     } else {
+        
+  //       setImageSource({ uri: response.uri });
+  //     }
+  //   });
+  // };
+
+  const handlePickImage = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
     });
-      
-      return auth;
-    }, [])
-    // if (user) { 
-    //   const testSession = onAuthStateChanged(session, (user) => {
-    //     console.log(user.displayName)
-    //   })
 
-    //   return testSession;
-    //  }
+    console.log(result);
 
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+    }
+  };
+
+  console.log(`berikut adalah photoURL dari user: ${dataUser.photoUrl}`);
 
   return (
     <>
@@ -122,7 +158,7 @@ const Editprofile = () => {
         <Box bg={"muted.500"} h={"20%"} w={"100%"}></Box>
         <Box alignSelf={"center"}>
           <Image
-            source={require("../../../../assets/favicon.png")}
+            source={dataUser.photoUrl}
             w={"100px"}
             mt={"-10"}
             h={"100px"}
@@ -150,6 +186,7 @@ const Editprofile = () => {
               placeholder={"Phone Number"}
               onChangeText={(text) => setNewPhone(text)}
               type="file"
+              value={newPhone}
             />
             <Text mt={3} mb={2} bold>
               Password
@@ -176,11 +213,18 @@ const Editprofile = () => {
             <Text mt={3} mb={2} bold>
               Upload Profile
             </Text>
-            <Input
-              placeholder={"File"}
-              type="file"
-            />
-            <Button mt={6} onPress={() => setModalVisible(true)}>
+            {/* {imageSource && (
+              <Image source={imageSource} style={{ width: 200, height: 200 }} />
+            )} */}
+            {/* <Button title="Select Image" onPress={handleImagePicker} /> */}
+            <Box style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+              <Button title="Pick an image from camera roll" onPress={handlePickImage} />
+              {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+            </Box>
+            <Button mt={6} onPress={() => {
+              setModalVisible(true)
+              updateProfileData(image)
+            }}>
               UPDATE
             </Button>
           </VStack>

@@ -8,14 +8,49 @@ import {
   Radio,
 } from "native-base";
 import { TouchableOpacity } from "react-native";
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { getAuth } from "@firebase/auth";
+import { getDoc, doc, updateDoc, deleteField } from "firebase/firestore";
+import { FIRESTORE } from "../../firebase/credential";
 
 const Checkout = () => {
   const route = useRoute();
 
   const Harga = route.params ? route.params.totalPrice : "";
   const { itemName, itemPrice, itemImage, quantity } = route.params;
+  const user = getAuth().currentUser;
+  const [addresses, setAddresses] = useState('');
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const userAddressesRef = doc(FIRESTORE, "addresses", user.uid);
+        const userAddressesSnapshot = await getDoc(userAddressesRef);
+
+        if (userAddressesSnapshot.exists()) {
+          const userData = userAddressesSnapshot.data();
+          const addressesData = Object.keys(userData).map((key) => ({
+            id: key,
+            ...userData[key],
+          }));
+          setAddresses(addressesData.find((address) => address.selected === true));
+          
+
+
+        } else {
+          console.log("User addresses not found");
+        }
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+      }
+    };
+
+    fetchAddresses();
+  }, []);
+
+  console.log(addresses);
+  // console.log(addresses.find((address) => address.selected === true));
 
   const navigation = useNavigation();
   return (
@@ -39,17 +74,16 @@ const Checkout = () => {
               alignSelf={"center"}
             >
               <Text fontWeight={"bold"} fontSize={16}>
-                Brody Pentagon
+                {user.displayName}
               </Text>
               <Text color={"#89580A"} fontSize={12}>
-                darkside@gmail.com
+                {user.email}
               </Text>
               <Text color={"#89580A"} fontSize={12}>
                 +14987889999
               </Text>
               <Text fontWeight={"bold"} fontSize={14}>
-                Leibnizstraße 16, Wohnheim 6, No: 8X Clausthal-Zellerfeld,
-                Germany
+                {addresses.fullAddress}
               </Text>
             </Box>
           </TouchableOpacity>
@@ -59,13 +93,8 @@ const Checkout = () => {
           </Text>
           <View justifyContent={"center"} alignItems={"center"}>
             <Radio.Group>
-            <Radio shadow={2} value="1">
-                <Box
-                  width={300}
-                  backgroundColor={"#FEFFC1"}
-                  p={5}
-                  my={3}
-                >
+              <Radio shadow={2} value="1">
+                <Box width={300} backgroundColor={"#FEFFC1"} p={5} my={3}>
                   <View marginRight={3}>
                     <Text color={"#89580A"} fontSize={18}>
                       DANA
@@ -74,12 +103,7 @@ const Checkout = () => {
                 </Box>
               </Radio>
               <Radio shadow={2} value="2">
-                <Box
-                  width={300}
-                  backgroundColor={"#FEFFC1"}
-                  p={5}
-                  my={3}
-                >
+                <Box width={300} backgroundColor={"#FEFFC1"} p={5} my={3}>
                   <View marginRight={3}>
                     <Text color={"#89580A"} fontSize={18}>
                       Ovoo
