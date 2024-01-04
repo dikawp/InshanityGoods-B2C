@@ -11,7 +11,7 @@ import { TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getAuth } from "@firebase/auth";
-import { getDoc, doc, updateDoc, deleteField } from "firebase/firestore";
+import { getDoc, doc, onSnapshot } from "firebase/firestore";
 import { FIRESTORE } from "../../../firebase/credential";
 import { snapTransactions } from "./payment";
 
@@ -24,6 +24,7 @@ const Checkout = () => {
   const navigation = useNavigation();
   const user = getAuth().currentUser;
   const [addresses, setAddresses] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -50,6 +51,21 @@ const Checkout = () => {
 
     fetchAddresses();
   }, []);
+
+  useEffect(() => {
+    const userRef = doc(FIRESTORE, "users", user.uid);
+
+    const fetchData = onSnapshot(userRef, (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        console.log("Document Data (onSnapshot):", data);
+        setDisplayName(data);
+      } else {
+        console.log("Document does not exist!");
+      }
+    });
+    return () => fetchData();
+  }, [user.email]);
 
   const Checkout = async () => {
     const data = {
@@ -91,7 +107,7 @@ const Checkout = () => {
     console.log("Data :", data);
   };
 
-  // console.log(addresses);
+  console.log(displayName);
 
   return (
     <View
@@ -113,16 +129,18 @@ const Checkout = () => {
             alignSelf={"center"}
           >
             <Text fontWeight={"bold"} fontSize={16}>
-              {user.displayName}
+              {displayName.username}
             </Text>
             <Text color={"#89580A"} fontSize={12}>
-              {user.email}
+              {displayName.email}
             </Text>
             <Text color={"#89580A"} fontSize={12}>
-              +14987889999
+              {displayName.phoneNumber}
             </Text>
             <Text fontWeight={"bold"} fontSize={14}>
-              {addresses.fullAddress}
+              {addresses
+                ? addresses.fullAddress
+                : "pilih alamat terlebih dahulu"}
             </Text>
           </Box>
         </TouchableOpacity>

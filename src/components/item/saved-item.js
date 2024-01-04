@@ -1,42 +1,46 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Box, View, Text, Image } from "native-base";
-import {
-    doc,
-    getDoc,
-    updateDoc,
-    collection
-  } from "firebase/firestore";
+import { doc, getDoc, updateDoc, collection } from "firebase/firestore";
 import { FIRESTORE } from "../../firebase/credential";
 import { getAuth } from "firebase/auth";
+import { Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native"; 
 
 const savedCollectionRef = collection(FIRESTORE, "saved");
 const session = getAuth();
 
 const toggleBookmark = async (itemId) => {
-    try {
-      const savedDocRef = doc(savedCollectionRef, session.currentUser.email);
-      const savedDocSnap = await getDoc(savedDocRef);
-  
-      if (savedDocSnap.exists()) {
-        const savedData = savedDocSnap.data();
-        const updatedItems = savedData.items.filter((id) => id !== itemId);
-  
-        // Perbarui dokumen saved dengan array items yang baru
-        await updateDoc(savedDocRef, { items: updatedItems });
-  
-  
-        console.log("Item removed from saved");
-      }
-    } catch (error) {
-      console.error("Error toggling bookmark:", error);
+  try {
+    const savedDocRef = doc(savedCollectionRef, session.currentUser.email);
+    const savedDocSnap = await getDoc(savedDocRef);
+
+    if (savedDocSnap.exists()) {
+      const savedData = savedDocSnap.data();
+      const updatedItems = savedData.items.filter((id) => id !== itemId);
+
+      // Perbarui dokumen saved dengan array items yang baru
+      await updateDoc(savedDocRef, { items: updatedItems });
+
+      console.log("Item removed from saved");
     }
-  };
-  
+  } catch (error) {
+    console.error("Error toggling bookmark:", error);
+  }
+};
 
+const SavedItem = ({ item }) => {
+  const navigation = useNavigation();
 
-const SavedItem = ({item}) => {
   return (
+    <Pressable
+      onPress={() =>
+        navigation.navigate("Item Detail", {
+          itemId: item.id,
+          itemName: item.name,
+        })
+      }
+    >
       <Box
         key={item.name}
         flexDirection="row"
@@ -72,6 +76,7 @@ const SavedItem = ({item}) => {
           onPress={() => toggleBookmark(item.id)}
         />
       </Box>
+    </Pressable>
   );
 };
 
