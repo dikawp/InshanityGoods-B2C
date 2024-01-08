@@ -39,7 +39,6 @@ const Address = () => {
     const fetchAddresses = async () => {
       try {
         const userAddressesRef = doc(FIRESTORE, "addresses", user.uid);
-        const userAddressesSnapshot = await getDoc(userAddressesRef);
 
         // SNAPSHOT BIAR FUNCTION RENDER ULANG JIKA ADA PERUBAHAN DATA
         const Rerender = onSnapshot(userAddressesRef, (doc) => {

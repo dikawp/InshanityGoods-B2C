@@ -65,7 +65,7 @@ const DisplaySnap = ({ route }) => {
         const productQuerySnapshot = await getDocs(q);
         productQuerySnapshot.forEach(async (productDoc) => {
           const currentStock = productDoc.data().stock;
-          const updatedStock = currentStock - 1;
+          const updatedStock = currentStock - data.item_details.quantity;
 
           await updateDoc(productDoc.ref, { stock: updatedStock });
           console.log(

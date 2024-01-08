@@ -27,7 +27,7 @@ const Login = () => {
         .then((userCredential) => {
           const user = userCredential.user;
           console.log(user);
-          navigation.navigate('Tabs');
+          navigation.replace('Tabs');
         })
         .catch((error) => {
           if (error) {
@@ -55,7 +55,9 @@ const Login = () => {
     return () => {
       unsubscribe(); 
     };
-  }, [session, navigation]);
+  }, []);
+
+  console.log(session);
 
   return (
     <View mx={14} my={20}>
@@ -92,7 +94,7 @@ const Login = () => {
         <Text fontSize={"16px"}>New here?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text fontSize={"16px"} color={"blue.400"} ml={2}>
-            Sign In
+            Sign Up
           </Text>
         </TouchableOpacity>
       </Center>

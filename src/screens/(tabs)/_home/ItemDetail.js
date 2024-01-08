@@ -236,7 +236,7 @@ const ItemDetail = ({ route }) => {
               itemPrice: itemDetail.price,
             })
           }
-          disabled={itemDetail.stock === 0} 
+          disabled={itemDetail.stock <= 0} 
         >
           <Box
             top={2.5}

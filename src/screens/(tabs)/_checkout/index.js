@@ -94,8 +94,7 @@ const Checkout = () => {
     if (data) {
       try {
         const post = await snapTransactions(data);
-        // console.log(post);
-
+        
         const url = post.redirect_url;
         console.log(url);
         navigation.navigate("Payment Gateway", { url, data });
