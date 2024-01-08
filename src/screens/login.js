@@ -24,16 +24,23 @@ const Login = () => {
   const signIn = async () => {
     try {
       signInWithEmailAndPassword(Auth, email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log(user);
-        navigation.navigate('Tabs')
-      })
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log(user);
+          navigation.replace('Tabs');
+        })
+        .catch((error) => {
+          if (error) {
+            alert("Incorrect Email or Password");
+          } else {
+            alert("Sign-in failed: " + error.message);
+          }
+        });
     } catch (error) {
-      console.log(error);
-      alert("Sign Failed :" + error);
+      alert("Sign-in failed: " + error.message);
     }
   };
+  
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(session, (user) => {
@@ -48,7 +55,9 @@ const Login = () => {
     return () => {
       unsubscribe(); 
     };
-  }, [session, navigation]);
+  }, []);
+
+  console.log(session);
 
   return (
     <View mx={14} my={20}>
@@ -85,7 +94,7 @@ const Login = () => {
         <Text fontSize={"16px"}>New here?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Register")}>
           <Text fontSize={"16px"} color={"blue.400"} ml={2}>
-            Sign In
+            Sign Up
           </Text>
         </TouchableOpacity>
       </Center>

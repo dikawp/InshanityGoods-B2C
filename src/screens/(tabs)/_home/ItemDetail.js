@@ -23,11 +23,12 @@ import {
 } from "firebase/firestore";
 import { getAuth } from "@firebase/auth";
 import { FIRESTORE } from "../../../firebase/credential";
+import { numberWithCommas } from "../../../components/commas";
 
 const ItemDetail = ({ route }) => {
   const { itemName } = route.params;
   const productRef = collection(FIRESTORE, "products");
-  const [detailProduct, setDetailProduct] = useState(['']);
+  const [detailProduct, setDetailProduct] = useState([""]);
 
   const q = query(productRef, where("name", "==", itemName));
 
@@ -36,7 +37,7 @@ const ItemDetail = ({ route }) => {
       try {
         const data = await getDocs(q);
         const productList = data.docs.map((doc) => ({
-            id: doc.id,
+          id: doc.id,
           ...doc.data(),
         }));
         setDetailProduct(productList);
@@ -53,7 +54,7 @@ const ItemDetail = ({ route }) => {
   const [count, setCount] = useState(1);
   const [isSaved, setIsSaved] = useState();
 
-  // AKSES Collection 
+  // AKSES Collection
   const savedCollectionRef = collection(FIRESTORE, "saved");
   const session = getAuth();
   const user = session.currentUser;
@@ -64,15 +65,16 @@ const ItemDetail = ({ route }) => {
       const savedItemSnap = await getDoc(savedItemRef);
 
       if (savedItemSnap.exists()) {
-
         const savedData = savedItemSnap.data();
         const isItemSaved = savedData.items.includes(itemDetail.id);
 
         if (isItemSaved) {
           // Lek Item ws ono == hapus
-          const updatedItems = savedData.items.filter((id) => id !== itemDetail.id);
+          const updatedItems = savedData.items.filter(
+            (id) => id !== itemDetail.id
+          );
           await updateDoc(savedItemRef, { items: updatedItems });
-          setIsSaved(false)
+          setIsSaved(false);
 
           console.log("Item removed from savedItem");
         } else {
@@ -80,7 +82,7 @@ const ItemDetail = ({ route }) => {
           await updateDoc(savedItemRef, {
             items: [...savedData.items, itemDetail.id],
           });
-          setIsSaved(true)
+          setIsSaved(true);
 
           console.log("Item added to savedItem");
         }
@@ -106,7 +108,6 @@ const ItemDetail = ({ route }) => {
       setTotal(newTotal);
     }
   };
-  
 
   let plus = () => {
     setCount(count + 1);
@@ -115,6 +116,7 @@ const ItemDetail = ({ route }) => {
     setCount(count - 1);
   };
 
+  console.log(itemDetail);
   return (
     <NativeBaseProvider>
       <View
@@ -128,9 +130,8 @@ const ItemDetail = ({ route }) => {
         <ScrollView zIndex={-1}>
           <Image
             alignSelf={"center"}
-            marginTop={15}
             width={348}
-            height={310}
+            height={350}
             alt="image"
             source={{ uri: itemDetail.image }}
           />
@@ -155,9 +156,14 @@ const ItemDetail = ({ route }) => {
             flexDirection={"row"}
             justifyContent={"space-between"}
           >
-            <Text flex={2} fontSize={16}>
-              IDR {itemDetail.price}
-            </Text>
+            <View>
+              <Text flex={2} fontSize={16}>
+                IDR {itemDetail.price}
+              </Text>
+              <Text flex={2} fontSize={16}>
+                Stock {itemDetail.stock}
+              </Text>
+            </View>
 
             <TouchableOpacity disabled={count === 1} onPress={minus}>
               <Box
@@ -223,13 +229,14 @@ const ItemDetail = ({ route }) => {
         <TouchableOpacity
           onPress={() =>
             navigation.navigate("Checkout", {
-              totalPrice: Total,
+              totalPrice: Total ? Total : itemDetail.price,
               itemName: itemDetail.name,
               itemImage: itemDetail.image,
               quantity: count,
               itemPrice: itemDetail.price,
             })
           }
+          disabled={itemDetail.stock <= 0} 
         >
           <Box
             top={2.5}
@@ -237,7 +244,7 @@ const ItemDetail = ({ route }) => {
             justifyContent={"center"}
             width={120}
             height={45}
-            backgroundColor={"#D19E00"}
+            backgroundColor={itemDetail.stock === 0 ? 'grey' : "#D19E00"}
           >
             <Text color={"white"} fontSize={"16"} textAlign={"center"}>
               Checkout

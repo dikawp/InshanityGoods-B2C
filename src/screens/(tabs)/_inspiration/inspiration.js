@@ -3,8 +3,6 @@ import { ScrollView, Heading, VStack, Text } from "native-base";
 import { TouchableOpacity } from "react-native";
 import Categories from "../../../components/categories-inspiration";
 
-import inspiration_data from "../../../dummy/category_inspiration";
-
 import ProductItem from "../../../components/item/inspiration-item";
 
 // DATABASE
@@ -51,10 +49,6 @@ const InspirationScreen = ({ navigation }) => {
       setInspirations(filteredItems);
     }, [activeCategory, listInspiration]);
   }
-  
-  // console.log(activeCategory)
-  // console.log(listInspiration)
-  // console.log(inspiration)
 
   return (
     <ScrollView mx={14} mt={12} scrollIndicatorInsets={false}>
@@ -64,7 +58,6 @@ const InspirationScreen = ({ navigation }) => {
       <Categories onChange={categoriesHandler} />
       <VStack>
       {activeCategory === "all"
-
           ? listInspiration.map((listInspiration) => (
               <ProductItem item={listInspiration} key={listInspiration.id} />
 

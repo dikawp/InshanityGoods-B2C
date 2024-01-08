@@ -117,6 +117,7 @@ const Home = () => {
             ))}
       </HStack>
     </ScrollView>
+    
   );
 };
 

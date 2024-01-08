@@ -91,7 +91,7 @@ const Editprofile = () => {
       >
         <Modal.Content>
           <Modal.CloseButton />
-          <Modal.Header>Wibu?</Modal.Header>
+          <Modal.Header>Konfirmasi</Modal.Header>
           <Modal.Body>
             Enter your old password.
             <FormControl>
@@ -116,7 +116,7 @@ const Editprofile = () => {
         <Box bg={"muted.500"} h={"20%"} w={"100%"}></Box>
         <Box alignSelf={"center"}>
           <Image
-            source={require("../../../../assets/favicon.png")}
+            source={require("../../../images/brody.png")}
             w={"100px"}
             mt={"-10"}
             h={"100px"}
@@ -166,13 +166,6 @@ const Editprofile = () => {
                 </Pressable>
               }
               placeholder="New Password"
-            />
-            <Text mt={3} mb={2} bold>
-              Upload Profile
-            </Text>
-            <Input
-              placeholder={"File"}
-              type="file"
             />
             <Button mt={6} onPress={() => setModalVisible(true)}>
               UPDATE

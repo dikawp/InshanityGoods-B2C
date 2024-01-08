@@ -1,7 +1,8 @@
 import React from "react";
 import { TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native"; // Correct import
+import { useNavigation } from "@react-navigation/native"; 
 import { Box, Text, Image, HStack, VStack, Heading } from "native-base";
+import { numberWithCommas } from "../../components/commas"
 
 
 const ProductItem = ({ item }) => {
@@ -32,7 +33,7 @@ const ProductItem = ({ item }) => {
             <Heading size="xs">{item.name}</Heading>
             <Text fontSize="sm">{item.category}</Text>
             <Heading mt={3} size={"sm"}>
-              IDR: {item.price}
+              IDR: {numberWithCommas(item.price)}
             </Heading>
           </VStack>
         </HStack>

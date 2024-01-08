@@ -57,7 +57,7 @@ const Setting = () => {
         <Box bg={"muted.500"} h={"25%"} w={"100%"}></Box>
         <Box alignSelf={"center"}>
           <Image
-            source={require("../../../../assets/favicon.png")}
+            source={require("../../../images/brody.png")}
             w={"120px"}
             h={"120px"}
             mt={"-10"}

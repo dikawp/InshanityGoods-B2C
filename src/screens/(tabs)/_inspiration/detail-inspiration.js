@@ -6,7 +6,6 @@ import RelatedItem from "../../../components/item/related-item";
 
 function DetailScreen({ route }) {
   const { itemDetail, itemImage, itemName, itemProduct } = route.params;
-  const navigation = useNavigation();
 
   console.log(itemProduct[0]);
 
@@ -40,6 +39,7 @@ function DetailScreen({ route }) {
             <Text fontSize={"24"} fontWeight={"bold"} my={4}>
               Related Items
             </Text>
+            
             <Box width="100%" height={240} flexDirection={"row"}>
               <ScrollView
                 horizontal={true}
@@ -53,6 +53,7 @@ function DetailScreen({ route }) {
                 ))}
               </ScrollView>
             </Box>
+
           </Box>
         </Box>
       </ScrollView>

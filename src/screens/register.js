@@ -44,7 +44,7 @@ const Register = () => {
           phoneNumber: "",
           photoUrl: "",
         });
-        navigation.navigate("Login");
+        navigation.replace('Tabs')
       }
     } catch (error) {
       console.log(error);
@@ -117,7 +117,7 @@ const Register = () => {
             placeholder="Confirm Password"
           />
         </FormControl>
-        <TouchableOpacity onPress={() => signUp()}>
+        <TouchableOpacity onPress={signUp}>
           <SignButton title={"Sign Up"} />
         </TouchableOpacity>
       </VStack>
@@ -126,7 +126,7 @@ const Register = () => {
         <Text fontSize={"16px"}>Already have Account?</Text>
         <TouchableOpacity onPress={() => navigation.navigate("Login")}>
           <Text fontSize={"16px"} color={"blue.400"} ml={2}>
-            Sign Up
+            Sign In
           </Text>
         </TouchableOpacity>
       </Center>
